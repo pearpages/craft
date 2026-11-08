@@ -18,11 +18,19 @@ claude plugin install craft@craft
 
 Restart Claude Code after installing or updating.
 
+To have `/craft:issue` put issues on a GitHub project board, name it in your `~/.claude/CLAUDE.md`
+(for example "Backlog board: `@me` project `3`"), or link it in a project's `AGENTS.md`.
+
 ## Usage
 
 | Command | What it does |
 |---|---|
+| `/craft:scaffold` | Creates a project's knowledge files, or checks an existing project against the standard |
 | `/craft:adr` | Records a decision as an ADR: proposes it, accepts it on your word, supersedes an old one, or checks the index |
+| `/craft:issue` | Queues issues and pushes them in one go: right repo, labels, your board if you have one, no duplicates |
+| `/craft:commit-message` | Writes a commit message in the repo's own convention and commits on your OK |
+| `/craft:diagram` | Draws Mermaid diagrams of flows, lifecycles, decisions and data, into the right doc |
+| `/craft:maturity` | Is the project ready to advertise? A scorecard, and every gap filed as an issue |
 
 ```text
 /craft:adr we keep TypeScript on 6.x until dependency-cruiser supports 7

@@ -12,6 +12,9 @@ have made differently is not a decision, it's a fact, and it belongs in `archite
 **Scope:** writes only `docs/adr/` and `decisions.md`. It offers, and never makes on its own,
 edits to `principles.md` and `GLOSSARY.md`. It never commits.
 
+Before starting, follow `${CLAUDE_PLUGIN_ROOT}/references/project-context.md`; Step 1 below is
+what it means for this skill.
+
 ## Step 0: mode
 
 `/craft:adr [mode] [what]`. With no mode, infer it from the request.
@@ -117,7 +120,7 @@ Keep it short: a page, not an essay. Link related ADRs by number.
 Fix only what the user approves, with the smallest edit in the file's own style.
 
 A project with no record gets `decisions.md` (an intro, the index table, the format above) and
-`docs/adr/`, on the user's OK. Point to `/scaffold` if the project lacks its other knowledge
+`docs/adr/`, on the user's OK. Point to `/craft:scaffold` if the project lacks its other knowledge
 files too.
 
 ## After writing

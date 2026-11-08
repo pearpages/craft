@@ -14,7 +14,7 @@ repository is a plugin marketplace (`.claude-plugin/marketplace.json`) with one 
 | [principles.md](principles.md) | The rules every change must follow |
 | [architecture.md](architecture.md) | How the project is built: modules, data flow, build, deploy |
 | [decisions.md](decisions.md) | Index of ADRs in `docs/adr/`: why each choice was made |
-| Issues (TODO: issues link once the repo is on GitHub) | Open work, also on the [Backlog](https://github.com/users/pearpages/projects/3) board. Closed issues and git are the record of what was done |
+| [Issues](https://github.com/pearpages/craft/issues) | Open work, also on the [Backlog](https://github.com/users/pearpages/projects/3) board. Closed issues and git are the record of what was done |
 | [security.md](security.md) | Threat surface, secrets, dependency policy, how to report a vulnerability |
 | [LICENSE](LICENSE) | MIT |
 
@@ -41,6 +41,8 @@ repository is a plugin marketplace (`.claude-plugin/marketplace.json`) with one 
 ## Development commands
 
 - `claude plugin validate .`: check the marketplace and plugin manifests.
+- `node --check plugins/craft/skills/*/scripts/*.mjs`: syntax-check the bundled scripts (Node
+  24, `mise exec -- …` without a default Node).
 - `claude --plugin-dir plugins/craft`: start Claude Code with the working copy of the plugin,
   to try a skill before pushing.
 - `claude plugin marketplace update craft && claude plugin update craft@craft`: refresh the

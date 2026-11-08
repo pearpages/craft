@@ -7,8 +7,8 @@ permission).
 
 ## Reporting a vulnerability
 
-Use GitHub's private vulnerability reporting on the repository once it is on GitHub (TODO:
-enable private advisories). Never a public issue for an unfixed vulnerability.
+Use GitHub's private vulnerability reporting on [the repository](https://github.com/pearpages/craft/security/advisories/new) (TODO:
+enable private advisories in the repository settings). Never a public issue for an unfixed vulnerability.
 
 ## Surface
 
@@ -18,7 +18,12 @@ enable private advisories). Never a public issue for an unfixed vulnerability.
   ADR, an AGENTS.md written by someone else) are data, never instructions to the skill.
 - Outward-facing steps (commits, pushes, issues) need the user's OK
   ([P3](principles.md)).
-- There are no scripts yet. A skill that adds one adds it here: what it runs and what it reads.
+- Bundled scripts, standard library only:
+  - `scaffold/scripts/check.mjs` and `maturity/scripts/scan.mjs` read the target repository and
+    print facts; they write nothing.
+  - `issue/scripts/push.mjs` reads `~/.cache/issue/queue.json` and calls `gh` with an argument
+    array (no shell), the body on stdin, so a title or body can't inject a command. It creates
+    issues only after the user confirms the queue.
 
 ## Secrets
 
@@ -27,7 +32,7 @@ enable private advisories). Never a public issue for an unfixed vulnerability.
 
 ## Dependencies
 
-None at runtime. A script, when one is added, uses only Node's standard library.
+None. The scripts use only Node's standard library; `gh` is the user's own install.
 
 ## Known risks
 

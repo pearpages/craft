@@ -1,0 +1,20 @@
+# OS / editors
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp
+
+# Env and secrets
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+
+# Local Claude Code settings
+.claude/settings.local.json
+
+# --- stack-specific lines below (added by /scaffold from what it detects) ---
