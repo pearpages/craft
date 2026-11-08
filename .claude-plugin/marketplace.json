@@ -1,0 +1,12 @@
+{
+  "name": "craft",
+  "description": "Claude Code skills for how a project is built: knowledge files, decisions, issues, implementation and releases.",
+  "owner": { "name": "pearpages" },
+  "plugins": [
+    {
+      "name": "craft",
+      "source": "./plugins/craft",
+      "description": "Workflow skills that read and write a project's knowledge files: decisions (ADRs) first, more to come."
+    }
+  ]
+}

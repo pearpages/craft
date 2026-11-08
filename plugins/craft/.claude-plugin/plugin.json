@@ -1,0 +1,9 @@
+{
+  "name": "craft",
+  "description": "Workflow skills that read and write a project's knowledge files: decisions (ADRs) first, more to come.",
+  "author": { "name": "pearpages" },
+  "homepage": "https://github.com/pearpages/craft",
+  "repository": "https://github.com/pearpages/craft",
+  "license": "MIT",
+  "keywords": ["adr", "decisions", "workflow", "project-knowledge"]
+}

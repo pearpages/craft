@@ -1,0 +1,34 @@
+# Principles
+
+Every change to this repository, whether code, docs, tests or process, complies with these
+rules. When a change would break one, stop and ask the user instead of working around it.
+Changing a principle is itself a decision: it needs the user's agreement and an ADR
+([decisions.md](decisions.md)). How things are built is in
+[architecture.md](architecture.md); security rules in [security.md](security.md).
+
+Each rule has a **Why**, and a **Check** where something enforces it (a test, lint rule,
+CI step, hook).
+
+## Skills
+
+**P1. A craft skill is about how a project is built, not about analysing its code.** A skill
+that measures or explains code belongs in xray's plugin.
+*Why:* each plugin's prefix should say what its skills do; `/xray:` means xray's analysis,
+`/craft:` means the way of working. [ADR-0002](docs/adr/0002-craft-plugin-repository.md)
+*Check:* review.
+
+**P2. A skill reads only its own plugin's files and the repository it runs on.** No paths into
+`~/.claude/skills` or any other personal folder.
+*Why:* the plugin is public; anyone who installs it lacks the owner's personal files.
+*Check:* review.
+
+**P3. A skill never commits, pushes or opens issues without the user's OK.**
+*Why:* those reach other people and can't be quietly undone. *Check:* review; each SKILL.md
+states it.
+
+## Process
+
+**P4. Knowledge lives in its file.** How to work → `AGENTS.md`; rules → here; how it is
+built → `architecture.md`; why → an ADR; work → GitHub Issues; risk → `security.md`.
+*Why:* a session log in the agent file hides decisions from the next person.
+[ADR-0001](docs/adr/0001-project-knowledge-files.md)
