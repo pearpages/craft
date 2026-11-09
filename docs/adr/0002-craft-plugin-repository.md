@@ -1,7 +1,7 @@
 # 0002. The owner's workflow skills live in craft, a plugin repository of their own
 
 - **Date:** 2026-11-08
-- **Status:** Proposed
+- **Status:** Accepted — chosen by the owner on 2026-11-09
 
 ## Context
 

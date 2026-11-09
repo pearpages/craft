@@ -1,7 +1,7 @@
 # 0003. Version the knowledge standard, and sweep every repository for upgrades
 
 - **Date:** 2026-11-09
-- **Status:** Proposed
+- **Status:** Accepted — chosen by the owner on 2026-11-09
 
 ## Context
 
