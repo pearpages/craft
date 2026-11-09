@@ -24,7 +24,7 @@ The plugin manifest has no `version`, so every pushed commit is a new version.
 | `plugins/craft/references/xray.md` | How a craft skill uses xray's data when xray's plugin is installed (`maturity`) |
 | `plugins/craft/skills/scaffold/` | `/craft:scaffold`: creates or checks the knowledge files, and flags docs that name paths or scripts the repo no longer has; `scripts/check.mjs` gathers the facts, `templates/` holds the files |
 | `plugins/craft/skills/adr/` | `/craft:adr`: propose, accept, supersede and check Architecture Decision Records in any repository |
-| `plugins/craft/skills/issue/` | `/craft:issue`: queue issues, then push them; `scripts/push.mjs` creates them with `gh` and adds them to a board when given one |
+| `plugins/craft/skills/issue/` | `/craft:issue`: queue issues, then push them; `scripts/push.mjs` lists each repo's issues once and creates them with `gh` (and adds them to a board when given one); `scripts/duplicates.mjs` holds the duplicate rules, with no I/O |
 | `plugins/craft/skills/implement/` | `/craft:implement`: one issue on a branch, from design (contracts, pure core, failure modes, domain terms, business rules) through tests and checks to a hand-over for `/craft:commit-message` |
 | `plugins/craft/skills/commit-message/` | `/craft:commit-message`: a message in the repo's convention, then the commit, on OK |
 | `plugins/craft/skills/diagram/` | `/craft:diagram`: Mermaid diagrams of behaviour and data (code maps belong to xray) |
@@ -65,7 +65,10 @@ files in the repository Claude Code is working in. The only state kept outside a
   scaffold script that builds a small git repository, the prompt that runs one skill, and
   graders (checks on the files it wrote, and an LLM rubric for what it said and asked). The
   runner also scores a run without the plugin, so a case shows what the skill adds.
-- The bundled scripts have no tests of their own; `node --check` catches syntax only.
+- Script rules are unit-tested with Node's built-in runner: a pure module beside its script
+  (`issue/scripts/duplicates.mjs`) and a `*.test.mjs` next to it
+  ([ADR-0004](docs/adr/0004-node-test-runner-for-scripts.md)). The rest of the scripts have
+  `node --check` only.
 - Not in CI: every eval run is a paid Claude session. Run before pushing a skill change (P6).
 - Release: a push to `main` on GitHub. Users get it with `claude plugin marketplace update
   craft` and `claude plugin update craft@craft`.

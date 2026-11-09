@@ -3,6 +3,7 @@
 // through `gh` with an argument array (no shell), and bodies go in on stdin.
 //
 //   node push.mjs --check   # print possible duplicates for every queued item, create nothing
+//                           # (lists each repo's issues once; the rules are in duplicates.mjs)
 //   node push.mjs           # create every queued item, empty the queue
 //   node push.mjs --board 3 --owner @me   # …and put each one on that project board
 //
@@ -13,12 +14,13 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
+import { findMatches } from './duplicates.mjs';
 
 const QUEUE = join(homedir(), '.cache/issue/queue.json');
 const arg = (name) => { const i = process.argv.indexOf(name); return i > 0 ? process.argv[i + 1] : undefined; };
 const BOARD = arg('--board'); // a project number; no board when absent
 const OWNER = arg('--owner') ?? '@me';
-const STOP = new Set('a an the to of in on for and or with from is be it its as at by fix add'.split(' '));
+const LIST_LIMIT = 1000; // newest issues read per repo by --check; older ones aren't compared
 
 function gh(args, input) {
   for (let attempt = 1; ; attempt++) {
@@ -45,15 +47,33 @@ if (gaps.length) {
 }
 
 if (checking) {
+  // List each repo's issues once (open and closed). Not --search: GitHub's search index lags a
+  // fresh issue, so pushing a queue twice in a row filed duplicates (craft#8).
+  const listed = new Map();
+  const issuesOf = (repo) => {
+    if (!listed.has(repo)) {
+      try {
+        listed.set(repo, { issues: JSON.parse(gh(['issue', 'list', '--repo', repo, '--state', 'all',
+          '--limit', String(LIST_LIMIT), '--json', 'number,title,state,url'])) });
+      } catch (error) {
+        listed.set(repo, { error: String(error.stderr ?? error.message).trim() });
+      }
+    }
+    return listed.get(repo);
+  };
+  let unlisted = 0;
   for (const [n, item] of items.entries()) {
-    const words = item.title.toLowerCase().replace(/[^\p{L}\p{N}\s-]/gu, ' ').split(/\s+/)
-      .filter((w) => w.length > 2 && !STOP.has(w)).slice(0, 4);
-    const hits = JSON.parse(gh(['issue', 'list', '--repo', item.repo, '--state', 'all', '--limit', '4',
-      '--search', `${words.join(' OR ')} in:title`, '--json', 'number,title,state,url']));
-    const found = hits.map((h) => `#${h.number} [${h.state}] ${h.title}`).join(' · ') || 'none';
+    const { issues, error } = issuesOf(item.repo);
+    let found;
+    if (error) {
+      unlisted++;
+      found = `couldn't list ${item.repo}'s issues (${error}); check by hand or run --check again`;
+    } else {
+      found = findMatches(item.title, issues).map((h) => `#${h.number} [${h.state}] ${h.title}`).join(' · ') || 'none';
+    }
     console.log(`${n + 1}. ${item.repo} — ${item.title}\n   matches: ${found}`);
   }
-  process.exit(0);
+  process.exit(unlisted ? 1 : 0);
 }
 
 const failed = [];
