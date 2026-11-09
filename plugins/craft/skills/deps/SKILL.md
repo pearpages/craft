@@ -42,7 +42,14 @@ and offer the modes.
 
 1. Draft `.github/dependabot.yml`: one `updates` entry per ecosystem and directory found
    (`npm`, `pip`, `cargo`, `gomod`, `docker`, `github-actions`…), weekly, with
-   - a `groups` entry that puts patch and minor updates in one PR per ecosystem;
+   - a `groups` entry that puts patch and minor updates in one PR per ecosystem, with
+     `update-types: ["minor", "patch"]` so a major never hides inside the group:
+     ```yaml
+     groups:
+       npm:
+         patterns: ["*"]
+         update-types: ["minor", "patch"]
+     ```
    - majors left as one PR each;
    - an `ignore` rule for every limit from Step 1, with a comment naming its ADR:
      ```yaml
@@ -71,6 +78,7 @@ For each:
 | A limit | Does it cross a limit from Step 1? Then it should be ignored: close it and add the `ignore` rule |
 | Impact | The xray report comment on the PR, when the project has xray: which features and dependents it touches |
 | Cost | A cost rule from Step 1 that the upgrade could move: say what to re-measure |
+| A hidden major | A grouped PR that bumps a major version: the group has no `update-types`. Propose adding `update-types: ["minor", "patch"]` to the group in `dependabot.yml`, so Dependabot splits the major into its own PR |
 
 Then one table, one verdict per PR, **merge** (CI green, no breaking change that applies),
 **hold** (why, and what would unblock it) or **close** (crosses a limit; propose the `ignore`
