@@ -1,7 +1,7 @@
 # 0004. Test the bundled scripts with Node's built-in test runner
 
 - **Date:** 2026-11-09
-- **Status:** Proposed
+- **Status:** Accepted — chosen by the owner on 2026-11-09
 
 ## Context
 
