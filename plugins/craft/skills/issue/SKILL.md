@@ -68,7 +68,8 @@ Done when every item has a repo, a kind, a title and a body.
 
 Run `node ${CLAUDE_PLUGIN_ROOT}/skills/issue/scripts/push.mjs --check`. It lists each item's repo's issues
 once (open and closed, the newest 1,000), not through search, which misses an issue created
-seconds ago, and prints up to four that share the title's key words. An **open** match that is the same work makes
+seconds ago, and prints up to four that share the title's key words. It exits 1 when a repo couldn't be
+listed; those items say why, so check them by hand. An **open** match that is the same work makes
 the item a duplicate: drop it and note the link. A **closed** match is worth a note
 (reopen instead?).
 

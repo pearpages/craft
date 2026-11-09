@@ -15,6 +15,7 @@ accepted.
 | [0002](docs/adr/0002-craft-plugin-repository.md) | The owner's workflow skills live in craft, a plugin repository of their own | Accepted | 2026-11-08 |
 | [0003](docs/adr/0003-versioned-knowledge-standard.md) | Version the knowledge standard, and sweep every repository for upgrades | Accepted | 2026-11-09 |
 | [0004](docs/adr/0004-node-test-runner-for-scripts.md) | Test the bundled scripts with Node's built-in test runner | Accepted | 2026-11-09 |
+| [0005](docs/adr/0005-script-bugs-take-unit-tests.md) | A bug in a script's logic is pinned by a unit test, not an eval case | Accepted | 2026-11-09 |
 
 ## Format
 

@@ -193,8 +193,8 @@ Go through the diff once against this table and fix what fails:
 Show: what changed (files, one line each), the contract (as it now reads), how it was tested
 (commands and results), the modularity comparison and any measurements, the design choices and
 ADRs proposed, and the out-of-scope items to file. Then offer `/craft:commit-message` with
-`Fixes #N`, and `/craft:issue` for the out-of-scope items. The user commits, pushes and opens the
-PR.
+`Fixes #N`, `/craft:review` to check the branch and open the PR, and `/craft:issue` for the
+out-of-scope items. The user commits; pushing and the PR wait for their OK.
 
 ## Rules
 
