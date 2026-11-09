@@ -26,6 +26,7 @@ The plugin manifest has no `version`, so every pushed commit is a new version.
 | `plugins/craft/skills/adr/` | `/craft:adr`: propose, accept, supersede and check Architecture Decision Records in any repository |
 | `plugins/craft/skills/issue/` | `/craft:issue`: queue issues, then push them; `scripts/push.mjs` lists each repo's issues once and creates them with `gh` (and adds them to a board when given one); `scripts/duplicates.mjs` holds the duplicate rules, with no I/O |
 | `plugins/craft/skills/implement/` | `/craft:implement`: one issue on a branch, from design (contracts, pure core, failure modes, domain terms, business rules) through tests and checks to a hand-over for `/craft:commit-message` |
+| `plugins/craft/skills/review/` | `/craft:review`: findings by severity against the issue's asks and the project's rules, then the PR (push, house-style description, labels) on OK |
 | `plugins/craft/skills/commit-message/` | `/craft:commit-message`: a message in the repo's convention, then the commit, on OK |
 | `plugins/craft/skills/diagram/` | `/craft:diagram`: Mermaid diagrams of behaviour and data (code maps belong to xray) |
 | `plugins/craft/skills/security/` | `/craft:security`: the surface a diff adds, a whole-repo audit, or drift in `security.md`; hands the bug hunt to the built-in `/security-review` |

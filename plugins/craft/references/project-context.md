@@ -112,7 +112,7 @@ A mistake is worth something only if it can't happen the same way again. Put its
 | `xray:explain-pr`, `xray:features` | `architecture.md`, `GLOSSARY.md` | — / `xray.features.json` |
 | plan *(to build)* | `vision.md`, `decisions.md`, `architecture.md`, issues | a spec, issues, a milestone |
 | `craft:implement` | `AGENTS.md` (commands, Pitfalls), `principles.md`, `architecture.md`, the ADRs for the area, `security.md` when relevant, `GLOSSARY.md`, the business rules in code and tests, xray's graph when available | code and tests on a branch, `architecture.md`, `README.md`, `security.md`, Proposed ADRs, glossary entries (offered) |
-| review *(to build)* | `AGENTS.md` Pitfalls, `principles.md`, `security.md` (via `craft:security diff`), the issue | findings; a fix without its lesson (§ 3c) is one |
+| `craft:review` | the diff, the issue it fixes, `AGENTS.md` (commands, Pitfalls), `principles.md`, `architecture.md`, the ADRs for the area, `security.md` (via `craft:security diff`), `GLOSSARY.md` | findings; the PR (title, description, labels), on OK; a fix without its lesson (§ 3c) is a finding |
 | merge & release *(to build)* | `AGENTS.md` (release steps), the versioning ADR | closed issues, tags, release notes |
 | `craft:security` | `security.md`, the ADRs on security or dependencies, the diff (or the repo for `audit`) | `security.md` (on OK), issues (via `craft:issue`) |
 | `craft:ci` | `AGENTS.md` (commands, order), the manifests, `security.md` (pinning), existing workflows | `.github/workflows/ci.yml`, `architecture.md` testing section (on OK), issues for missing checks |

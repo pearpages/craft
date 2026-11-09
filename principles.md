@@ -41,9 +41,12 @@ with checkable bullets, in the same commit. A change that asks nothing of reposi
 
 ## Tests
 
-**P6. A skill's behaviour is pinned by eval cases, and a fixed skill bug adds one.** Each skill
-has at least one case in `plugins/craft/evals/` that runs it on a small fixture repository and
-grades what it wrote and said; a fix for a skill that did the wrong thing comes with the case that
-would have caught it. *Why:* a skill is instructions, so a wording change can quietly change
-behaviour; the lessons ladder (contract § 3c) prefers a check to a note, for craft too.
-*Check:* `claude plugin eval plugins/craft` before pushing a skill change; review.
+**P6. A skill's behaviour is pinned by eval cases, and a fixed skill bug adds the check that
+would have caught it.** Each skill has at least one case in `plugins/craft/evals/` that runs it on
+a small fixture repository and grades what it wrote and said. A fix for a skill that did the
+wrong thing comes with an eval case when the bug was in the skill's behaviour, or a unit test
+beside the script (`node:test`) when it was in a script's logic, which the eval sandbox can't
+reach. *Why:* a skill is instructions, so a wording change can quietly change behaviour; the
+lessons ladder (contract § 3c) prefers a check to a note, for craft too.
+[ADR-0005](docs/adr/0005-script-bugs-take-unit-tests.md) *Check:* `claude plugin eval
+plugins/craft` and `node --test` before pushing a skill change; `/craft:review`.
