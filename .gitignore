@@ -19,3 +19,6 @@ Thumbs.db
 
 # --- stack-specific lines below (added by /scaffold from what it detects) ---
 node_modules/
+
+# Eval runs write a results folder per run
+plugins/craft/evals/results/

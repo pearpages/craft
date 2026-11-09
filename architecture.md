@@ -57,5 +57,14 @@ files in the repository Claude Code is working in. The only state kept outside a
 
 - No build. `claude plugin validate .` checks the manifests; `node --check` the scripts.
 - A skill is tried locally with `claude --plugin-dir plugins/craft` before it is pushed.
+
+### How it's tested
+
+- Skill evals with Claude Code's `claude plugin eval`: `plugins/craft/evals/<case>/` holds a
+  scaffold script that builds a small git repository, the prompt that runs one skill, and
+  graders (checks on the files it wrote, and an LLM rubric for what it said and asked). The
+  runner also scores a run without the plugin, so a case shows what the skill adds.
+- The bundled scripts have no tests of their own; `node --check` catches syntax only.
+- Not in CI: every eval run is a paid Claude session. Run before pushing a skill change (P6).
 - Release: a push to `main` on GitHub. Users get it with `claude plugin marketplace update
   craft` and `claude plugin update craft@craft`.

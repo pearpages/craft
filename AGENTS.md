@@ -47,6 +47,10 @@ Knowledge standard: craft v2 (`/craft:scaffold check` upgrades it)
   24, `mise exec -- …` without a default Node).
 - `claude --plugin-dir plugins/craft`: start Claude Code with the working copy of the plugin,
   to try a skill before pushing.
+- `claude plugin eval plugins/craft --trust-plugin --scaffold`: run the skill evals in
+  `plugins/craft/evals/` (each case builds a fixture repo, runs a skill, grades the result) and
+  write a report; `--case <glob>` runs one. Each run is a real Claude session, so it costs and
+  takes minutes: run it before pushing a skill change (P6), not on every commit.
 - `claude plugin marketplace update craft && claude plugin update craft@craft`: refresh the
   installed copy after a push, then restart Claude Code.
 

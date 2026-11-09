@@ -38,3 +38,12 @@ or rule that repositories must follow gets an entry in `plugins/craft/references
 with checkable bullets, in the same commit. A change that asks nothing of repositories doesn't.
 *Why:* repositories scaffolded earlier only learn about a change through that file.
 [ADR-0003](docs/adr/0003-versioned-knowledge-standard.md) *Check:* review.
+
+## Tests
+
+**P6. A skill's behaviour is pinned by eval cases, and a fixed skill bug adds one.** Each skill
+has at least one case in `plugins/craft/evals/` that runs it on a small fixture repository and
+grades what it wrote and said; a fix for a skill that did the wrong thing comes with the case that
+would have caught it. *Why:* a skill is instructions, so a wording change can quietly change
+behaviour; the lessons ladder (contract § 3c) prefers a check to a note, for craft too.
+*Check:* `claude plugin eval plugins/craft` before pushing a skill change; review.
