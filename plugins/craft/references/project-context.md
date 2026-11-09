@@ -111,7 +111,7 @@ A mistake is worth something only if it can't happen the same way again. Put its
 | `xray:onboard` | `AGENTS.md`, `architecture.md` | `docs/onboarding/` |
 | `xray:explain-pr`, `xray:features` | `architecture.md`, `GLOSSARY.md` | — / `xray.features.json` |
 | plan *(to build)* | `vision.md`, `decisions.md`, `architecture.md`, issues | a spec, issues, a milestone |
-| implement *(to build)* | `AGENTS.md` Pitfalls, `principles.md`, `architecture.md`, relevant ADRs, `security.md` when relevant | code, `architecture.md`, Proposed ADRs |
+| `craft:implement` | `AGENTS.md` (commands, Pitfalls), `principles.md`, `architecture.md`, the ADRs for the area, `security.md` when relevant, `GLOSSARY.md`, the business rules in code and tests, xray's graph when available | code and tests on a branch, `architecture.md`, `README.md`, `security.md`, Proposed ADRs, glossary entries (offered) |
 | review *(to build)* | `AGENTS.md` Pitfalls, `principles.md`, `security.md` (via `craft:security diff`), the issue | findings; a fix without its lesson (§ 3c) is one |
 | merge & release *(to build)* | `AGENTS.md` (release steps), the versioning ADR | closed issues, tags, release notes |
 | `craft:security` | `security.md`, the ADRs on security or dependencies, the diff (or the repo for `audit`) | `security.md` (on OK), issues (via `craft:issue`) |

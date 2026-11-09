@@ -63,5 +63,8 @@ Knowledge standard: craft v2 (`/craft:scaffold check` upgrades it)
   answer (the skill shows what it wrote), and check file contents with `regex` graders.
 - `claude plugin eval --case a --case b` runs only one case → it takes one glob → run one case per
   call, or a glob that matches both.
+- An eval run can't run the project's tests or git ("xcrun" or "No version is set for shim") →
+  the eval sandbox has a fresh `HOME`, so neither mise's Node nor the system git works there → grade
+  what the skill wrote and reported, and accept "couldn't run X here, run `cmd`" instead of a real run.
 - A push is rejected for a "Stripe Test API Secret Key" in an eval case → GitHub push protection
   scans fixtures too → build a fake key from pieces in `scaffold.sh` (see `security-new-secret`).
