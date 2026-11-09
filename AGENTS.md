@@ -45,6 +45,8 @@ Knowledge standard: craft v2 (`/craft:scaffold check` upgrades it)
 - `claude plugin validate .`: check the marketplace and plugin manifests.
 - `node --check plugins/craft/skills/*/scripts/*.mjs`: syntax-check the bundled scripts (Node
   24, `mise exec -- …` without a default Node).
+- `node --test "plugins/craft/skills/*/scripts/*.test.mjs"`: run the scripts' unit tests once
+  (Node's built-in runner, no dependencies; [ADR-0004](docs/adr/0004-node-test-runner-for-scripts.md)).
 - `claude --plugin-dir plugins/craft`: start Claude Code with the working copy of the plugin,
   to try a skill before pushing.
 - `claude plugin eval plugins/craft --trust-plugin --scaffold`: run the skill evals in

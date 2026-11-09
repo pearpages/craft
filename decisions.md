@@ -14,6 +14,7 @@ accepted.
 | [0001](docs/adr/0001-project-knowledge-files.md) | Project knowledge lives in principles, architecture, decisions and security; work in GitHub Issues | Accepted | 2026-11-08 |
 | [0002](docs/adr/0002-craft-plugin-repository.md) | The owner's workflow skills live in craft, a plugin repository of their own | Accepted | 2026-11-08 |
 | [0003](docs/adr/0003-versioned-knowledge-standard.md) | Version the knowledge standard, and sweep every repository for upgrades | Accepted | 2026-11-09 |
+| [0004](docs/adr/0004-node-test-runner-for-scripts.md) | Test the bundled scripts with Node's built-in test runner | Accepted | 2026-11-09 |
 
 ## Format
 

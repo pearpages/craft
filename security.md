@@ -25,6 +25,8 @@ issue for an unfixed vulnerability.
   - `issue/scripts/push.mjs` reads `~/.cache/issue/queue.json` and calls `gh` with an argument
     array (no shell), the body on stdin, so a title or body can't inject a command. It creates
     issues only after the user confirms the queue.
+  - `issue/scripts/duplicates.mjs` holds the duplicate rules and does no I/O: titles listed by
+    `push.mjs` are data it compares, never commands.
 
 ## Secrets
 
