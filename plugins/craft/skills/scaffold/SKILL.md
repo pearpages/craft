@@ -170,9 +170,11 @@ Then re-run `check.mjs` and confirm that everything you touched is now compliant
 - Never overwrite or restructure an existing file without confirmation. Creating a missing
   file is fine.
 - Match the existing wrapping, heading and list style.
-- Don't touch source code, tooling, CI or dependencies; that is out of scope.
+- Don't touch source code, tooling, CI or dependencies; that is out of scope. When the repo has
+  dependencies and no `.github/dependabot.yml`, list it as a follow-up for `/craft:deps setup`
+  instead of writing it.
 - Never commit or push. When the user wants to commit, point them to `/craft:commit-message`.
 - Opening issues and running a label or migration tool for real write to GitHub: ask first.
 - Finish with one line listing what was created, what was fixed, how many follow-up issues
-  were opened (or wait for a GitHub repo), and the suggested next step (e.g. `/craft:maturity` if the project will be
+  were opened (or wait for a GitHub repo), and the suggested next step (`/craft:deps setup` when updates aren't automated, `/craft:maturity` if the project will be
   advertised).

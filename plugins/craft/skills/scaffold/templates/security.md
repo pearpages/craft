@@ -24,8 +24,8 @@ is a valid answer; say so.}}
 
 ## Dependencies
 
-{{Policy: minimal runtime deps, lockfile committed, how updates and audits happen
-(Dependabot/Renovate/`npm audit`), pinned CI actions.}}
+{{Policy: minimal runtime deps, lockfile committed, pinned CI actions. How updates arrive: when
+they aren't automated yet, write "TODO: run `/craft:deps setup`".}}
 
 ## Known risks
 

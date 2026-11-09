@@ -27,6 +27,7 @@ The plugin manifest has no `version`, so every pushed commit is a new version.
 | `plugins/craft/skills/commit-message/` | `/craft:commit-message`: a message in the repo's convention, then the commit, on OK |
 | `plugins/craft/skills/diagram/` | `/craft:diagram`: Mermaid diagrams of behaviour and data (code maps belong to xray) |
 | `plugins/craft/skills/security/` | `/craft:security`: the surface a diff adds, a whole-repo audit, or drift in `security.md`; hands the bug hunt to the built-in `/security-review` |
+| `plugins/craft/skills/deps/` | `/craft:deps`: Dependabot setup with the ADRs' version limits as ignore rules, triage of update PRs, one major upgrade at a time |
 | `plugins/craft/skills/wrap-up/` | `/craft:wrap-up`: end-of-session routing of outcomes to files and issues, and a checklist of what's open |
 | `plugins/craft/skills/maturity/` | `/craft:maturity`: is the project ready to advertise; `scripts/scan.mjs` gathers the facts, gaps become issues |
 

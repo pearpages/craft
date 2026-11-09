@@ -94,6 +94,7 @@ A memory dense with paths, symbols or class names is almost always a project dec
 | review *(to build)* | `principles.md`, `security.md` (via `craft:security diff`), the issue | findings |
 | merge & release *(to build)* | `AGENTS.md` (release steps), the versioning ADR | closed issues, tags, release notes |
 | `craft:security` | `security.md`, the ADRs on security or dependencies, the diff (or the repo for `audit`) | `security.md` (on OK), issues (via `craft:issue`) |
+| `craft:deps` | `decisions.md` and ADRs (version limits), `security.md` (policy), `AGENTS.md` (commands), the update PRs | `.github/dependabot.yml`, `security.md` Dependencies, a branch for a major (all on OK) |
 | `craft:wrap-up` | `git status` of every repo the session touched, the conversation, open issues | issues (via `craft:issue`), ADRs (via `craft:adr`), any context file on OK |
 
 xray's skills are listed for completeness; they don't opt in to this file.

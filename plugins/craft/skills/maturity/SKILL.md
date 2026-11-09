@@ -120,7 +120,7 @@ Each item gets ✅ done · ⚠️ present but weak · ❌ missing · ❔ unverif
 |---|---|---|
 | D19 | Package shape | `exports`, `types`, `files`, `sideEffects` set; `publint` + `attw` (or equivalent) gate `prepublishOnly` |
 | D20 | Tarball | Published version == package.json; tarball includes README and LICENSE |
-| D21 | Dependencies | `peerDependencies` ranges sensible; runtime deps minimal; `engines` where relevant |
+| D21 | Dependencies | `peerDependencies` ranges sensible; runtime deps minimal; `engines` where relevant; updates automated (`.github/dependabot.yml`, else a `/craft:deps setup` issue) |
 | D22 | Size | Bundle size stated in README and matching the build |
 
 ### E. Community — nice-to-have, never blocks

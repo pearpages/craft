@@ -66,7 +66,8 @@ For each item found, one of:
 - **Breaks a rule:** a secret committed, a dependency against the policy, an unpinned action
   where the file says pinned. Say which rule and where (`path:line`).
 - **Claim drifted** (`check`, `audit`): `security.md` says something the code no longer shows.
-  Propose the correction.
+  Propose the correction. A Dependencies section that promises updates the repo doesn't
+  automate (no `.github/dependabot.yml`) is drift: point to `/craft:deps setup`.
 - **Needs a decision:** the change is fine only if the project accepts a risk or adopts a
   policy it doesn't have. Offer an ADR (`/craft:adr`), and a "Known risks" line once decided.
 
