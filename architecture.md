@@ -69,6 +69,9 @@ files in the repository Claude Code is working in. The only state kept outside a
   (`issue/scripts/duplicates.mjs`) and a `*.test.mjs` next to it
   ([ADR-0004](docs/adr/0004-node-test-runner-for-scripts.md)). The rest of the scripts have
   `node --check` only.
-- Not in CI: every eval run is a paid Claude session. Run before pushing a skill change (P6).
+- CI (`.github/workflows/ci.yml`) runs the scripts' syntax check and unit tests on every push to
+  `main` and every PR, with a read-only token. Not in CI: `claude plugin validate .` (it needs
+  Claude Code on the runner) and the evals (every run is a paid Claude session; run them before
+  pushing a skill change, P6).
 - Release: a push to `main` on GitHub. Users get it with `claude plugin marketplace update
   craft` and `claude plugin update craft@craft`.
