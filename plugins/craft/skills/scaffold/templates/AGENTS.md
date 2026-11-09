@@ -37,7 +37,6 @@ Knowledge standard: craft {{STANDARD_VERSION}} (`/craft:scaffold check` upgrades
 
 ## Development commands
 
-
 {{COMMANDS: one bullet per command — `cmd`: what it does. Prefer one-shot test commands (no watch mode).}}
 
 ## Pitfalls that have bitten before
