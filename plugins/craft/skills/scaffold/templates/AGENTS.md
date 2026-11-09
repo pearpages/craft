@@ -15,6 +15,8 @@
 
 [README.md](README.md) is the user-facing entry point.
 
+Knowledge standard: craft {{STANDARD_VERSION}} (`/craft:scaffold check` upgrades it)
+
 ## Working rules
 
 1. **Read `principles.md` before changing code or docs.** If a change would break a
@@ -34,6 +36,7 @@
 7. Confirm before anything outward-facing: pushes, releases, publishing, deploys.
 
 ## Development commands
+
 
 {{COMMANDS: one bullet per command — `cmd`: what it does. Prefer one-shot test commands (no watch mode).}}
 

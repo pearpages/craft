@@ -29,13 +29,14 @@ look them up before Step 6, never assume them.
 | `security.md` | Reporting, surface, secrets, dependencies, known risks | Exists; states the surface, even if it is "none" |
 | `LICENSE` | Only when distributed/public | Matches `package.json` `license`; README names it |
 | `.gitignore`, `.editorconfig`, `.git` | Repo basics | Present |
+| Standard version | The line `Knowledge standard: craft vN` in AGENTS.md | `N` is the newest version in `${CLAUDE_PLUGIN_ROOT}/references/standard-changes.md` |
 
 Templates live in `${CLAUDE_PLUGIN_ROOT}/skills/scaffold/templates/`. `{{…}}` marks a placeholder.
 **Never leave a `{{…}}` in an output file.** Replace it with drafted content, or with
 `TODO: <what's needed>` plus a matching follow-up (Step 6). `{{ISSUES_URL}}` is `issues.url`
 from the check; with no GitHub remote yet, write `TODO: issues link once the repo is on GitHub`.
 `{{BOARD_NOTE}}` is `, also on the [<board name>](<board URL>) board` when the tracking setup
-names a board, and nothing otherwise.
+names a board, and nothing otherwise. `{{STANDARD_VERSION}}` is `v` + `standard.current` from the check.
 
 ## Step 0 — Target
 
@@ -50,12 +51,23 @@ node ${CLAUDE_PLUGIN_ROOT}/skills/scaffold/scripts/check.mjs <path>
 The output is JSON facts: file presence and line counts, `entry` (CLAUDE.md imports, whether
 it is a shim, extra lines, dated headings that suggest a session log, the links in AGENTS.md
 including `agentsLinksIssues`), `adrs` (unindexed, dangling, missing status), `issues` (the
-GitHub remote and its issues URL), `legacyTasks` (a `tasks.md` that still exists: its size and
+GitHub remote and its issues URL), `standard` (the repo's version line, the newest version,
+and `behind`), `legacyTasks` (a `tasks.md` that still exists: its size and
 open checkboxes), cross-links, README facts,
 license, TODO counts, leftover `{{…}}` `placeholders`, and `basics` (git, gitignore, editorconfig, manifests, `isNew`).
 
 If `node` fails (not installed, or a version-manager shim with no default), don't debug it.
 Gather the same facts with Glob/Read/Grep and say the script was skipped.
+
+## Step 1b — Upgrade a repo that is behind
+
+When `standard.behind` is true, read `${CLAUDE_PLUGIN_ROOT}/references/standard-changes.md` and
+take every entry newer than `standard.repo` (v0, no line: all of them), oldest first. Each
+unchecked bullet the repo doesn't meet yet is one row in the Step 3 report (⚠️, "standard vN"),
+and is created (Step 4), proposed (Step 5) or handed to the skill it names (`/craft:deps setup`,
+`/craft:security check`), the same as any other row. Once every bullet is met or has a
+follow-up issue (Step 6), set the AGENTS.md line to the newest version, or add it after the
+document table. A repo whose version is current skips this step.
 
 ## Step 2 — Understand the project
 

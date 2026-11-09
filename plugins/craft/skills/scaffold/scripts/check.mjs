@@ -3,7 +3,8 @@
 // Usage: node check.mjs [repoPath]   → JSON on stdout. Zero dependencies.
 
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const root = resolve(process.argv[2] ?? '.');
 const read = (p) => {
@@ -53,6 +54,21 @@ const entry = {
   agentsLinksLicense: agentsLinks.has('LICENSE'),
   agentsLinksIssues: [...agentsLinks].some((l) => /^https:\/\/github\.com\/[^/]+\/[^/]+\/issues\/?$/.test(l)),
 };
+
+// Knowledge standard version: the repo's line in AGENTS.md vs the newest in standard-changes.md
+const changes = (() => {
+  try {
+    return readFileSync(join(dirname(fileURLToPath(import.meta.url)), '../../../references/standard-changes.md'), 'utf8');
+  } catch {
+    return '';
+  }
+})();
+const versions = [...changes.matchAll(/^## v(\d+)\b/gm)].map((m) => Number(m[1]));
+const standard = {
+  repo: Number(agents?.match(/Knowledge standard: craft v(\d+)/)?.[1] ?? 0),
+  current: versions.length ? Math.max(...versions) : null,
+};
+standard.behind = standard.current != null && standard.repo < standard.current;
 
 // ADRs
 const adrDir = join(root, 'docs/adr');
@@ -142,4 +158,4 @@ const basics = {
 };
 basics.isNew = basics.topLevel.filter((f) => !f.startsWith('.')).length === 0;
 
-console.log(JSON.stringify({ root, files, entry, adrs, issues, legacyTasks, crossLinks, readme: readmeFacts, license, todos, placeholders, basics }, null, 2));
+console.log(JSON.stringify({ root, files, standard, entry, adrs, issues, legacyTasks, crossLinks, readme: readmeFacts, license, todos, placeholders, basics }, null, 2));

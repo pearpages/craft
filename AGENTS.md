@@ -51,4 +51,4 @@ repository is a plugin marketplace (`.claude-plugin/marketplace.json`) with one 
 ## Pitfalls that have bitten before
 
 - A new skill is "unknown command" after a push → the installed marketplace clone doesn't pull
-  by itself → run the update command above, then restart.
+  by itself → run the update command above, then restart (or add the README's `SessionStart` hook).

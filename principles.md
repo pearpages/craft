@@ -32,3 +32,9 @@ states it.
 built → `architecture.md`; why → an ADR; work → GitHub Issues; risk → `security.md`.
 *Why:* a session log in the agent file hides decisions from the next person.
 [ADR-0001](docs/adr/0001-project-knowledge-files.md)
+
+**P5. A change to what the standard asks of a repository adds a version.** A new file, section
+or rule that repositories must follow gets an entry in `plugins/craft/references/standard-changes.md`,
+with checkable bullets, in the same commit. A change that asks nothing of repositories doesn't.
+*Why:* repositories scaffolded earlier only learn about a change through that file.
+[ADR-0003](docs/adr/0003-versioned-knowledge-standard.md) *Check:* review.

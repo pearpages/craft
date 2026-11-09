@@ -125,3 +125,10 @@ xray's skills are listed for completeness; they don't opt in to this file.
 - This file defines the layout; `craft:scaffold`'s table and `craft:maturity`'s checks point here
   instead of keeping their own copies.
 - Changing this contract changes how every craft skill works: agree it with the user first.
+- **Versions.** What the standard asks of a repository is versioned in
+  `references/standard-changes.md`. A repository records the version it follows in `AGENTS.md`
+  (`Knowledge standard: craft vN`); `craft:scaffold check` upgrades it, and workbench's sweep
+  files an upgrade issue in every repository that is behind. A repository that is behind keeps
+  working: its own `AGENTS.md` wins where it disagrees.
+- **Both ways.** A lesson that would bite any repository goes back to craft as an issue
+  (`craft:wrap-up`), so the standard learns from every repository and reaches all of them.

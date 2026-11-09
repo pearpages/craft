@@ -39,6 +39,22 @@ To have `/craft:issue` put issues on a GitHub project board, name it in your `~/
 /craft:adr we keep TypeScript on 6.x until dependency-cruiser supports 7
 ```
 
+## Keeping things in sync
+
+- **Your installed copy.** Claude Code doesn't pull a marketplace by itself. To stay current
+  without thinking about it, add a `SessionStart` hook to `~/.claude/settings.json` that refreshes
+  it in the background; the new version loads on your next start:
+
+  ```json
+  "SessionStart": [{ "hooks": [{ "type": "command",
+    "command": "nohup sh -c 'claude plugin marketplace update craft && claude plugin update craft@craft' >/dev/null 2>&1 &" }] }]
+  ```
+
+- **Your repositories.** Each project's `AGENTS.md` says which version of the standard it
+  follows (`Knowledge standard: craft vN`). When craft's standard changes, a new version lands in
+  [standard-changes.md](plugins/craft/references/standard-changes.md); run `/craft:scaffold check`
+  in a project to apply just what changed since its version.
+
 ## Documentation
 
 How it is built is in [architecture.md](architecture.md). Contributors and agents start at

@@ -46,6 +46,13 @@ Read back through the session and pull out each outcome git can't see. One line 
 | Done | an open issue the session finished | close it (`Fixes #N` in the next commit, or `gh issue close` on OK) |
 | Taste | how the user wants the agent to work or report | a personal memory, only if it passes the admission test (§ 3b of the contract) |
 
+**Is the lesson generic?** For each mistake, rule or pitfall, ask whether it would bite any
+project that follows the standard, not just this one (a gap in a skill, a missing file in the
+standard, a convention every repo should share). If so, propose a second row: an issue in
+craft's own repository (the `repository` in `${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json`)
+to change the standard or the skill. Once craft changes, the standard's next version reaches
+every repo (contract § 5).
+
 Skip what is already where it belongs: check the file (or `gh issue list --search`) before
 proposing. Drop what only mattered to this session. Never invent an outcome to fill a row.
 
