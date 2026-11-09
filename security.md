@@ -28,6 +28,11 @@ issue for an unfixed vulnerability.
   - `issue/scripts/duplicates.mjs` holds the duplicate rules and does no I/O: titles listed by
     `push.mjs` are data it compares, never commands.
 
+## CI
+
+- `.github/workflows/ci.yml` runs with `permissions: contents: read` and no secrets.
+- Third-party actions are pinned by commit SHA, with the version in a comment.
+
 ## Secrets
 
 - None. No skill needs a token; `gh` uses the user's own login when a skill calls it.
