@@ -25,7 +25,7 @@ Look for `AGENTS.md` at the repo root.
 | `principles.md` | Rules every change follows (`P1…`, *Why* / *Check*) | Always before changing code or docs (already loaded via the shim) | Only on the user's agreement, with an ADR |
 | `architecture.md` | How it is built: modules, data flow, build, deploy | Planning, implementing, explaining or reviewing anything structural | In the same commit as a structural or behavioural change |
 | `decisions.md` + `docs/adr/` | Why: one ADR per real choice, indexed | Before a choice that may already be decided; when a change touches an area an ADR covers | A choice between real alternatives → a **Proposed** ADR + an index line. The user accepts it. Never edit an accepted ADR; supersede it |
-| `security.md` | Threat surface, secrets, dependency policy, reporting | Anything touching auth, secrets, input handling, network or dependencies | When that surface changes |
+| `security.md` | Threat surface, secrets, dependency policy, reporting | Anything touching auth, secrets, input handling, network or dependencies | When that surface changes; `craft:security diff` finds the change |
 | GitHub Issues (+ milestones) | Open work, labelled `type:*` / `priority:*` / `area:*`, on the board the tracking setup names (§ 2b); milestones are the roadmap | Planning, picking work, avoiding duplicates | Through `/craft:issue` only. Finished work closes its issue with `Fixes #N` |
 | `README.md` | For users: what, why, install, usage | Explaining the project to someone outside it | When users can see the change |
 | `vision.md` *(optional, proposed)* | What it is for, who it is for, goals, non-goals | Planning, prioritising, judging maturity | When the direction changes, on the user's word |
@@ -65,6 +65,18 @@ A skill never hard-codes a board, an owner or a local path.
 - Match the file's existing style; make the smallest edit that keeps it true.
 - Never create `tasks.md`, never write a session summary into any context file.
 
+## 3b. Personal memory: the admission test
+
+Before saving anything to the agent's personal memory, ask: **would a different developer on
+this project need this to do the work correctly?**
+
+- **Yes** → it is a project decision (codebase, architecture, product, convention). Route it by
+  § 3 instead; at most leave a one-line memory pointing at the file.
+- **No** → it is about how this user wants the agent to work or report. A personal memory is
+  the right home.
+
+A memory dense with paths, symbols or class names is almost always a project decision.
+
 ## 4. Which skill reads and writes what
 
 | Skill | Reads | Writes |
@@ -79,9 +91,10 @@ A skill never hard-codes a board, an owner or a local path.
 | `xray:explain-pr`, `xray:features` | `architecture.md`, `GLOSSARY.md` | — / `xray.features.json` |
 | plan *(to build)* | `vision.md`, `decisions.md`, `architecture.md`, issues | a spec, issues, a milestone |
 | implement *(to build)* | `principles.md`, `architecture.md`, relevant ADRs, `security.md` when relevant | code, `architecture.md`, Proposed ADRs |
-| review *(to build)* | `principles.md`, `security.md`, the issue | findings |
+| review *(to build)* | `principles.md`, `security.md` (via `craft:security diff`), the issue | findings |
 | merge & release *(to build)* | `AGENTS.md` (release steps), the versioning ADR | closed issues, tags, release notes |
-| wrap-up *(to build)* | everything touched this session | issues, `AGENTS.md` pitfalls, Proposed ADRs |
+| `craft:security` | `security.md`, the ADRs on security or dependencies, the diff (or the repo for `audit`) | `security.md` (on OK), issues (via `craft:issue`) |
+| `craft:wrap-up` | `git status` of every repo the session touched, the conversation, open issues | issues (via `craft:issue`), ADRs (via `craft:adr`), any context file on OK |
 
 xray's skills are listed for completeness; they don't opt in to this file.
 

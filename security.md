@@ -7,8 +7,9 @@ permission).
 
 ## Reporting a vulnerability
 
-Use GitHub's private vulnerability reporting on [the repository](https://github.com/pearpages/craft/security/advisories/new) (TODO:
-enable private advisories in the repository settings). Never a public issue for an unfixed vulnerability.
+Use GitHub's private vulnerability reporting on
+[the repository](https://github.com/pearpages/craft/security/advisories/new). Never a public
+issue for an unfixed vulnerability.
 
 ## Surface
 

@@ -91,7 +91,7 @@ Each item gets ✅ done · ⚠️ present but weak · ❌ missing · ❔ unverif
 | A5 | Open work | In GitHub Issues with `type:*` / `priority:*` / `area:*` labels, no `tasks.md` (unless `AGENTS.md` says a tool still reads it); a leftover `tasks.md` is a ⚠️, fixed by `/craft:scaffold` |
 | A6 | `README.md` | What/why, card image at top, install, minimal example, docs link, license |
 | A7 | `LICENSE` | File exists and matches package.json `license` |
-| A7b | `security.md` | Reporting channel, surface, secrets and dependency policy for this project |
+| A7b | `security.md` | Reporting channel, surface, secrets and dependency policy for this project; still true of the code (`/craft:security check`) |
 | A8 | Open Graph | `og:title/description/image/url/image:alt` + `twitter:card=summary_large_image`; og:image 1200×630 exists and is live |
 | A9 | Docs published | `CNAME` with a custom domain, site returns 200, `homepage` points to it |
 

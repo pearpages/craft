@@ -30,6 +30,8 @@ To have `/craft:issue` put issues on a GitHub project board, name it in your `~/
 | `/craft:issue` | Queues issues and pushes them in one go: right repo, labels, your board if you have one, no duplicates |
 | `/craft:commit-message` | Writes a commit message in the repo's own convention and commits on your OK |
 | `/craft:diagram` | Draws Mermaid diagrams of flows, lifecycles, decisions and data, into the right doc |
+| `/craft:security` | Checks a change against the project's `security.md` and keeps the file true: `diff`, `audit` (onboarding) or `check` |
+| `/craft:wrap-up` | Closes a session: routes its decisions, pitfalls and to-dos to the right files and issues, then lists what's still uncommitted or pending |
 | `/craft:maturity` | Is the project ready to advertise? A scorecard, and every gap filed as an issue |
 
 ```text
