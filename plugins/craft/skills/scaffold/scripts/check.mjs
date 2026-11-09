@@ -33,6 +33,8 @@ for (const f of KNOWLEDGE) {
   const c = read(f);
   files[f] = { exists: c != null, lines: lines(c) };
 }
+// Standard v2: architecture.md has a heading about testing
+files['architecture.md'].testingSection = /^#{2,4} .*\btest/im.test(read('architecture.md') ?? '');
 
 // Entry files
 const claude = read('CLAUDE.md');
@@ -146,6 +148,41 @@ for (const f of [...KNOWLEDGE, ...adrFiles.map((a) => `docs/adr/${a}`), 'LICENSE
   if (n) placeholders[f] = n;
 }
 
+// Drift: concrete things the knowledge files name that the repo no longer has.
+// Paths in `backticks` whose first folder exists at the root, and `npm run <script>` mentions.
+const top0 = existsSync(root) ? readdirSync(root) : [];
+const DOCS = ['AGENTS.md', 'architecture.md', 'principles.md', 'README.md', 'security.md'];
+const scripts = new Set(Object.keys(pkg?.scripts ?? {}));
+const workspaceScripts = new Set();
+for (const ws of [].concat(pkg?.workspaces?.packages ?? pkg?.workspaces ?? [])) {
+  const base = String(ws).replace(/\/\*$/, '');
+  const dir = join(root, base);
+  const dirs = String(ws).endsWith('/*') && existsSync(dir) ? readdirSync(dir).map((d) => `${base}/${d}`) : [base];
+  for (const d of dirs) {
+    try {
+      Object.keys(JSON.parse(readFileSync(join(root, d, 'package.json'), 'utf8')).scripts ?? {}).forEach((s) => workspaceScripts.add(s));
+    } catch {}
+  }
+}
+const looksLikePath = (t) =>
+  !/[\s*<>{}$|]|NNNN|^~|^\/|^https?:|^@|^-|\.\.\./.test(t) &&
+  !/(^|\/)(dist|build|node_modules|coverage|\.cache)(\/|$)/.test(t) &&
+  /^[\w.-]+(\/[\w.@-]+)+\/?$/.test(t) &&
+  top0.includes(t.split('/')[0]); // anchored: its first folder exists at the repo root
+const drift = { missingPaths: [], missingScripts: [] };
+for (const f of DOCS) {
+  const text = read(f);
+  if (!text) continue;
+  for (const [, code] of text.matchAll(/`([^`\n]+)`/g)) {
+    const t = code.replace(/:\d+$/, '').replace(/[.,;:]$/, '');
+    if (looksLikePath(t) && !existsSync(join(root, t)) && !drift.missingPaths.some((m) => m.file === f && m.path === t))
+      drift.missingPaths.push({ file: f, path: t });
+    for (const [, s] of code.matchAll(/\b(?:npm|pnpm|yarn) run ([\w:.-]+)/g)) {
+      if (pkg && !scripts.has(s) && !workspaceScripts.has(s)) drift.missingScripts.push({ file: f, script: s });
+    }
+  }
+}
+
 // Repo basics + stack hints
 const MANIFESTS = ['package.json', 'pyproject.toml', 'requirements.txt', 'Cargo.toml', 'go.mod', 'Gemfile', 'composer.json', 'pom.xml', 'build.gradle', 'build.gradle.kts', 'mix.exs', 'Package.swift', 'deno.json', 'pubspec.yaml', '*.csproj'];
 const top = existsSync(root) ? readdirSync(root) : [];
@@ -158,4 +195,4 @@ const basics = {
 };
 basics.isNew = basics.topLevel.filter((f) => !f.startsWith('.')).length === 0;
 
-console.log(JSON.stringify({ root, files, standard, entry, adrs, issues, legacyTasks, crossLinks, readme: readmeFacts, license, todos, placeholders, basics }, null, 2));
+console.log(JSON.stringify({ root, files, standard, drift, entry, adrs, issues, legacyTasks, crossLinks, readme: readmeFacts, license, todos, placeholders, basics }, null, 2));

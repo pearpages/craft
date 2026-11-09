@@ -31,6 +31,7 @@ To have `/craft:issue` put issues on a GitHub project board, name it in your `~/
 | `/craft:commit-message` | Writes a commit message in the repo's own convention and commits on your OK |
 | `/craft:diagram` | Draws Mermaid diagrams of flows, lifecycles, decisions and data, into the right doc |
 | `/craft:security` | Checks a change against the project's `security.md` and keeps the file true: `diff`, `audit` (onboarding) or `check` |
+| `/craft:ci` | Sets up or checks CI: the project's own lint, type check, build and tests on every push and PR, actions pinned |
 | `/craft:deps` | Keeps dependencies current on the project's terms: sets up Dependabot, triages its PRs, takes a major upgrade through |
 | `/craft:wrap-up` | Closes a session: routes its decisions, pitfalls and to-dos to the right files and issues, then lists what's still uncommitted or pending |
 | `/craft:maturity` | Is the project ready to advertise? A scorecard, and every gap filed as an issue |

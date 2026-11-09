@@ -115,6 +115,7 @@ A mistake is worth something only if it can't happen the same way again. Put its
 | review *(to build)* | `AGENTS.md` Pitfalls, `principles.md`, `security.md` (via `craft:security diff`), the issue | findings; a fix without its lesson (§ 3c) is one |
 | merge & release *(to build)* | `AGENTS.md` (release steps), the versioning ADR | closed issues, tags, release notes |
 | `craft:security` | `security.md`, the ADRs on security or dependencies, the diff (or the repo for `audit`) | `security.md` (on OK), issues (via `craft:issue`) |
+| `craft:ci` | `AGENTS.md` (commands, order), the manifests, `security.md` (pinning), existing workflows | `.github/workflows/ci.yml`, `architecture.md` testing section (on OK), issues for missing checks |
 | `craft:deps` | `decisions.md` and ADRs (version limits), `security.md` (policy), `AGENTS.md` (commands), the update PRs | `.github/dependabot.yml`, `security.md` Dependencies, a branch for a major (all on OK) |
 | `craft:wrap-up` | `git status` of every repo the session touched, the conversation, open issues, `AGENTS.md` Pitfalls (repeats, § 3c) | issues (via `craft:issue`), ADRs (via `craft:adr`), any context file on OK |
 

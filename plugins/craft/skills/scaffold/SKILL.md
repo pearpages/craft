@@ -23,7 +23,7 @@ look them up before Step 6, never assume them.
 | `AGENTS.md` | **Canonical** agent file: how to work here + pointers. Never a session log | Links principles, architecture, decisions, security, the repo's issues (and LICENSE if present) |
 | `CLAUDE.md` | Shim so Claude Code loads the rules | Contains **only** `@AGENTS.md` and `@principles.md` |
 | `principles.md` | Rules every change follows (`P1…`, each with *Why* / *Check*) | Real rules about *this* project; links decisions + architecture |
-| `architecture.md` | How it is built: shape, modules, data flow, build/test/deploy | Describes this project, not a template |
+| `architecture.md` | How it is built: shape, modules, data flow, build/test/deploy | Describes this project, not a template; a section on testing says the kinds of tests, where they live and the one-shot command (standard v2) |
 | `decisions.md` + `docs/adr/NNNN-*.md` | Why: ADR index + format | Every ADR is indexed, no dangling links, every ADR has a Status. ADR 0001 records this standard |
 | GitHub Issues | Open work: one issue per to-do, labelled `type:*` / `priority:*` / `area:*`, on the board the tracking setup names, if any. Finished work closes its issue (`Fixes #N`) | No `tasks.md`; AGENTS.md links the issues; the repo has the shared labels |
 | `security.md` | Reporting, surface, secrets, dependencies, known risks | Exists; states the surface, even if it is "none" |
@@ -52,12 +52,20 @@ The output is JSON facts: file presence and line counts, `entry` (CLAUDE.md impo
 it is a shim, extra lines, dated headings that suggest a session log, the links in AGENTS.md
 including `agentsLinksIssues`), `adrs` (unindexed, dangling, missing status), `issues` (the
 GitHub remote and its issues URL), `standard` (the repo's version line, the newest version,
-and `behind`), `legacyTasks` (a `tasks.md` that still exists: its size and
+and `behind`), `drift` (paths in backticks under a root folder that don't exist, and
+`npm run` scripts that `package.json` doesn't define, per doc), `legacyTasks` (a `tasks.md` that still exists: its size and
 open checkboxes), cross-links, README facts,
 license, TODO counts, leftover `{{…}}` `placeholders`, and `basics` (git, gitignore, editorconfig, manifests, `isNew`).
 
 If `node` fails (not installed, or a version-manager shim with no default), don't debug it.
 Gather the same facts with Glob/Read/Grep and say the script was skipped.
+
+**Drift is a candidate, not a verdict.** For each `drift` entry, read the sentence around it:
+a path the doc says is generated, optional or in another repository is fine. The rest are ⚠️
+rows in Step 3 ("architecture.md names `packages/action/`, which no longer exists"), fixed in
+Step 5 with the smallest edit that makes the doc true again. Diagrams are
+`/xray:check-diagrams`' job and `security.md` is `/craft:security check`'s: point to them
+instead of re-checking.
 
 ## Step 1b — Upgrade a repo that is behind
 
@@ -184,9 +192,10 @@ Then re-run `check.mjs` and confirm that everything you touched is now compliant
 - Match the existing wrapping, heading and list style.
 - Don't touch source code, tooling, CI or dependencies; that is out of scope. When the repo has
   dependencies and no `.github/dependabot.yml`, list it as a follow-up for `/craft:deps setup`
-  instead of writing it.
+  instead of writing it. Same for CI: no workflow in `.github/workflows/` → a follow-up for
+  `/craft:ci`.
 - Never commit or push. When the user wants to commit, point them to `/craft:commit-message`.
 - Opening issues and running a label or migration tool for real write to GitHub: ask first.
 - Finish with one line listing what was created, what was fixed, how many follow-up issues
-  were opened (or wait for a GitHub repo), and the suggested next step (`/craft:deps setup` when updates aren't automated, `/craft:maturity` if the project will be
+  were opened (or wait for a GitHub repo), and the suggested next step (`/craft:ci` when there is no CI, `/craft:deps setup` when updates aren't automated, `/craft:maturity` if the project will be
   advertised).

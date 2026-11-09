@@ -20,7 +20,7 @@ repository is a plugin marketplace (`.claude-plugin/marketplace.json`) with one 
 
 [README.md](README.md) is the user-facing entry point.
 
-Knowledge standard: craft v1 (`/craft:scaffold check` upgrades it)
+Knowledge standard: craft v2 (`/craft:scaffold check` upgrades it)
 
 ## Working rules
 

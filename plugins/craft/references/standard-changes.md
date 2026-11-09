@@ -31,3 +31,14 @@ from v0 runs the full `/craft:scaffold check`, then:
 - [ ] Mistakes follow the lessons ladder (contract § 3c): every principle has a real *Check*
       where one is possible, or an issue proposing it.
 - [ ] `AGENTS.md` carries the line `Knowledge standard: craft v1`.
+
+## v2 — 2026-11-09
+
+`architecture.md` says how the project is tested, so the next person can run the tests and
+knows which kind to add.
+
+- [ ] `architecture.md` has a section on testing (a heading with "test" in it, such as
+      "How it's tested" under "Build, test, deploy") that names the kinds of tests, where each
+      lives, and the one command that runs them once (never watch mode). No tests yet? Say so,
+      and file an issue.
+- [ ] `AGENTS.md` carries the line `Knowledge standard: craft v2`.

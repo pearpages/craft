@@ -22,4 +22,10 @@ skill) when there are more than a handful of moving parts.}}
 
 ## Build, test, deploy
 
-{{Toolchain, test layers, CI, where it deploys and how a release happens.}}
+{{Toolchain, CI, where it deploys and how a release happens.}}
+
+### How it's tested
+
+{{The kinds of tests (unit, integration, end-to-end, against real services or fixtures), where
+each lives, and the one command that runs them once (never watch mode). What CI runs. "No tests
+yet" is a valid answer: say so, and file an issue.}}

@@ -108,7 +108,7 @@ Each item gets ✅ done · ⚠️ present but weak · ❌ missing · ❔ unverif
 
 | # | Item | ✅ when |
 |---|---|---|
-| C14 | Tests + CI | Tests exist; CI runs tests **and** lint on push (PRs too if the repo takes PRs) |
+| C14 | Tests + CI | Tests exist; CI runs tests **and** lint on push (PRs too if the repo takes PRs); a gap points to `/craft:ci` |
 | C15 | Pipelines | CI deploys the docs; release is tag/workflow-driven; npm provenance / trusted publishing |
 | C16 | Release notes | CHANGELOG, README "What's new", or GitHub Releases with notes for the current version |
 | C17 | Honest docs | Spot-checked claims match the code; no TODO/TBD/"coming soon" in public docs |
