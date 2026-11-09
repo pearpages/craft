@@ -77,6 +77,27 @@ this project need this to do the work correctly?**
 
 A memory dense with paths, symbols or class names is almost always a project decision.
 
+## 3c. Lessons: where a mistake goes
+
+A mistake is worth something only if it can't happen the same way again. Put its lesson on the
+**lowest rung that prevents it**:
+
+| Rung | Form | When |
+|---|---|---|
+| 1. Check | A test, lint rule, hook or CI step | A machine can detect it. Strongest: nobody has to remember |
+| 2. Rule | A `principles.md` entry, *Why* = the incident, *Check* = how it's caught; an ADR when there was a real choice | A judgement no check can make, that every change must follow |
+| 3. Pitfall | `AGENTS.md` Pitfalls, as *symptom → cause → fix* | A trap to recognise: a misleading error, a tool's quirk |
+| Personal | A feedback memory | About how the user wants the agent to work, not the project (§ 3b) |
+
+- **Climb on a repeat.** A pitfall that bites twice becomes a rule or a check; a rule broken
+  again needs a check.
+- **Every fix asks where its lesson goes.** A `fix:` commit or a closed `type:bug` issue leaves a
+  regression test, a rule, a pitfall, or an explicit "nothing to learn".
+- **Prefer enforcing to writing.** A principle whose *Check* is only "review" is a candidate for
+  rung 1; propose the check as an issue.
+- The moments a lesson shows up: the user corrects the agent, a fix lands, a command or doc
+  misled, the same question is asked twice. `craft:wrap-up` collects them.
+
 ## 4. Which skill reads and writes what
 
 | Skill | Reads | Writes |
@@ -90,12 +111,12 @@ A memory dense with paths, symbols or class names is almost always a project dec
 | `xray:onboard` | `AGENTS.md`, `architecture.md` | `docs/onboarding/` |
 | `xray:explain-pr`, `xray:features` | `architecture.md`, `GLOSSARY.md` | — / `xray.features.json` |
 | plan *(to build)* | `vision.md`, `decisions.md`, `architecture.md`, issues | a spec, issues, a milestone |
-| implement *(to build)* | `principles.md`, `architecture.md`, relevant ADRs, `security.md` when relevant | code, `architecture.md`, Proposed ADRs |
-| review *(to build)* | `principles.md`, `security.md` (via `craft:security diff`), the issue | findings |
+| implement *(to build)* | `AGENTS.md` Pitfalls, `principles.md`, `architecture.md`, relevant ADRs, `security.md` when relevant | code, `architecture.md`, Proposed ADRs |
+| review *(to build)* | `AGENTS.md` Pitfalls, `principles.md`, `security.md` (via `craft:security diff`), the issue | findings; a fix without its lesson (§ 3c) is one |
 | merge & release *(to build)* | `AGENTS.md` (release steps), the versioning ADR | closed issues, tags, release notes |
 | `craft:security` | `security.md`, the ADRs on security or dependencies, the diff (or the repo for `audit`) | `security.md` (on OK), issues (via `craft:issue`) |
 | `craft:deps` | `decisions.md` and ADRs (version limits), `security.md` (policy), `AGENTS.md` (commands), the update PRs | `.github/dependabot.yml`, `security.md` Dependencies, a branch for a major (all on OK) |
-| `craft:wrap-up` | `git status` of every repo the session touched, the conversation, open issues | issues (via `craft:issue`), ADRs (via `craft:adr`), any context file on OK |
+| `craft:wrap-up` | `git status` of every repo the session touched, the conversation, open issues, `AGENTS.md` Pitfalls (repeats, § 3c) | issues (via `craft:issue`), ADRs (via `craft:adr`), any context file on OK |
 
 xray's skills are listed for completeness; they don't opt in to this file.
 

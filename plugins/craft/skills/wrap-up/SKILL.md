@@ -39,7 +39,7 @@ Read back through the session and pull out each outcome git can't see. One line 
 | Rule | "from now on, always…", a constraint every change must follow | `principles.md`, on the user's agreement, with an ADR |
 | Decision | a choice between real alternatives was made | a Proposed ADR via `/craft:adr` |
 | How it is built | a module, flow or command changed shape | `architecture.md` (and README if users see it) |
-| Pitfall | "X broke because Y, fixed by Z", a command that misled | `AGENTS.md` Pitfalls, as *symptom → cause → fix* |
+| Mistake | the user corrected the agent, a fix landed, a command or doc misled, the same question came up twice | the lessons ladder (contract § 3c): a check (as an issue, or a test in this change), a rule, or an `AGENTS.md` pitfall as *symptom → cause → fix*. Already a pitfall? It bit twice: propose the rung above |
 | Risk | a new input, secret, endpoint or dependency | `security.md`; offer `/craft:security diff` when the session's code changed the surface |
 | Term | a word the session agreed to use for a concept | `GLOSSARY.md`, if the project keeps one |
 | To-do | work mentioned, deferred, or left half done | an issue via `/craft:issue` |

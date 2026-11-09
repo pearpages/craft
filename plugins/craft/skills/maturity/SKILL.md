@@ -86,7 +86,7 @@ Each item gets ✅ done · ⚠️ present but weak · ❌ missing · ❔ unverif
 |---|---|---|
 | A1 | `AGENTS.md` + `CLAUDE.md` | AGENTS.md short, how-to-work + pointers, not a session diary; CLAUDE.md imports `@AGENTS.md` + `@principles.md` |
 | A2 | `architecture.md` | Describes how this project is built (modules, data flow, build) |
-| A3 | `principles.md` | Explicit rules every change follows |
+| A3 | `principles.md` | Explicit rules every change follows; most have a real *Check* (a test, lint, hook or CI step), not only "review" |
 | A4 | `decisions.md` + ADRs | Index present, `docs/adr/` holds the key decisions (≥ a few, dated, with status) |
 | A5 | Open work | In GitHub Issues with `type:*` / `priority:*` / `area:*` labels, no `tasks.md` (unless `AGENTS.md` says a tool still reads it); a leftover `tasks.md` is a ⚠️, fixed by `/craft:scaffold` |
 | A6 | `README.md` | What/why, card image at top, install, minimal example, docs link, license |

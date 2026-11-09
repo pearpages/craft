@@ -19,7 +19,7 @@ The plugin manifest has no `version`, so every pushed commit is a new version.
 |---|---|
 | `.claude-plugin/marketplace.json` | The marketplace: lists the `craft` plugin |
 | `plugins/craft/.claude-plugin/plugin.json` | The plugin's name, description and links |
-| `plugins/craft/references/project-context.md` | The contract: where a project keeps its knowledge, when each skill reads or writes each file, and where the labels and board come from (§ 2b), and the memory admission test (§ 3b). Every skill opts in with one line |
+| `plugins/craft/references/project-context.md` | The contract: where a project keeps its knowledge, when each skill reads or writes each file, and where the labels and board come from (§ 2b), and the memory admission test (§ 3b), and the lessons ladder for mistakes (§ 3c). Every skill opts in with one line |
 | `plugins/craft/references/xray.md` | How a craft skill uses xray's data when xray's plugin is installed (`maturity`) |
 | `plugins/craft/skills/scaffold/` | `/craft:scaffold`: creates or checks the knowledge files; `scripts/check.mjs` gathers the facts, `templates/` holds the files |
 | `plugins/craft/skills/adr/` | `/craft:adr`: propose, accept, supersede and check Architecture Decision Records in any repository |
