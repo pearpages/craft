@@ -58,3 +58,10 @@ Knowledge standard: craft v2 (`/craft:scaffold check` upgrades it)
 
 - A new skill is "unknown command" after a push → the installed marketplace clone doesn't pull
   by itself → run the update command above, then restart (or add the README's `SessionStart` hook).
+- An eval's `llm` grader fails although the skill did the right thing → `focus: files` hands the
+  judge only the created files' names, and an `llm` grader takes no `target` → judge the final
+  answer (the skill shows what it wrote), and check file contents with `regex` graders.
+- `claude plugin eval --case a --case b` runs only one case → it takes one glob → run one case per
+  call, or a glob that matches both.
+- A push is rejected for a "Stripe Test API Secret Key" in an eval case → GitHub push protection
+  scans fixtures too → build a fake key from pieces in `scaffold.sh` (see `security-new-secret`).
