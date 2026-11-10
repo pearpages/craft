@@ -16,8 +16,10 @@ construction:
   processes sit behind small interfaces that are passed in. That is what makes it testable
   without mocking the world, and replaceable without a rewrite.
 - **Safe** means validated at the edge, failing in a known way, never half-done, and not breaking
-  existing callers. **Scalable** means it holds as data grows and the next similar change is a
-  small addition. **Good developer experience** means the contract is documented with an
+  existing callers. **Scalable** means deep modules: small interfaces with the right amount of
+  information that hide real work, not shallow layers that forward calls; the next similar change
+  is a small addition. **Performant** means, first of all, no N+1: data is read in sets, and a
+  test counts the queries. **Good developer experience** means the contract is documented with an
   example, errors say what to do, and it runs with the project's usual commands.
 - It speaks the **domain language** (the project's own words, the same in the issue, the code
   and the docs) and keeps the **business rules** that hold today, unless the user decides to
@@ -28,8 +30,9 @@ touches. Decisions go through `/craft:adr`, new work found along the way through
 the commit through `/craft:commit-message`. Never commits, pushes, merges or opens a PR.
 
 Before starting, follow `${CLAUDE_PLUGIN_ROOT}/references/project-context.md`. The
-`codebase-design` skill (deep modules, seams) and `tdd` help if they are installed; on
-TypeScript/JavaScript, `${CLAUDE_PLUGIN_ROOT}/references/xray.md` says how to get xray's import
+`codebase-design` skill (deep modules, seams) and `tdd` help if they are installed; `${CLAUDE_PLUGIN_ROOT}/references/design.md`
+defines deep modules and the N+1 rules, read it before Step 2; on TypeScript/JavaScript,
+`${CLAUDE_PLUGIN_ROOT}/references/xray.md` says how to get xray's import
 graph and hotspots.
 
 ## Step 0: the issue
@@ -38,8 +41,9 @@ graph and hotspots.
 
 - Read the issue and its comments (`gh issue view N --comments`). Restate it in one sentence:
   what changes for whom, and how anyone will know it works.
-- **Too big or too vague?** More than one deliverable, or no way to tell it's done: stop, propose
-  how to split it, and file the pieces through `/craft:issue`. Implement one.
+- **Too big or too vague?** More than one deliverable, or no way to tell it's done: stop, and offer
+  `/craft:plan #N` to shape it into a spec and slices (or, for an obvious split, propose it and
+  file the pieces through `/craft:issue`). Implement one.
 - No issue and the change is more than a small fix: offer to file one first, so the work has a
   `Fixes #N`.
 
@@ -78,7 +82,7 @@ touches: a test-only or one-file change may need three rows, not fourteen.
 | Question | Answer, for this change |
 |---|---|
 | **Where it lives** | The module that owns it per `architecture.md`. A new module only when no existing one owns the idea; say why |
-| **The contract** | For each new or changed entry point: **inputs and outputs** as types; **errors** it can produce, and whether they are returned as values or thrown (follow the project's convention; say which); **invariants** that always hold; **side effects** (what it writes, calls or changes). The smallest surface that does the job: one entry point that hides several steps, no option nobody needs yet |
+| **The contract** | For each new or changed entry point: **inputs and outputs** as types; **errors** it can produce, and whether they are returned as values or thrown (follow the project's convention; say which); **invariants** that always hold; **side effects** (what it writes, calls or changes). The smallest surface that does the job: one entry point that hides several steps, no option nobody needs yet. **Deep, not shallow:** no wrapper that only forwards, no getter per field, no interface that mirrors one implementation |
 | **Abstractions** | Each outside dependency the logic needs (storage, network, clock, randomness, environment, processes, git) as a small interface the core receives, with the real implementation at the edge. Name each one and where it is created |
 | **Dependency direction** | Who imports whom: the core depends on its interfaces, adapters depend on the core, never the other way. No new cycle, no reaching into another module's internals |
 | **Data** | What it reads and writes, where state lives, and **where untrusted input is parsed** (once, at the edge, into the contract's types) |
@@ -87,7 +91,8 @@ touches: a test-only or one-file change may need three rows, not fourteen.
 | **Domain language** | The terms it uses, from the glossary or existing code. No new synonym for an existing concept; a new concept gets a name and a proposed `GLOSSARY.md` entry |
 | **Business rules** | The rules it must keep, and any it changes. **Changing a rule is the user's decision**: name it, what it becomes and why, and wait for an explicit OK (or an issue or ADR that already says so) |
 | **Security** | New input, secret, endpoint, file path, shell call or dependency: how it's validated, where the secret comes from, the `security.md` line it needs |
-| **Scale** | How big inputs can get, and the work per item (no I/O or query per item in a loop, nothing that re-reads what it already has). For code: the next similar case is an addition here; abstract on the third repeat, not the first |
+| **Data access** | Every place it reads data, and the **query budget** for each: a constant, independent of the number of items ("2 queries for any number of orders"). The entry point takes a set (`commentsFor(prIds)`); a per-item one that exists today gets a batch sibling, never a loop around it. The plan's budget, if `/craft:plan` set one |
+| **Scale** | How big inputs can get, and the work per item (nothing that re-reads what it already has). For code: the next similar case is an addition here; abstract on the third repeat, not the first |
 | **Performance** | The hot path or the cost the project measures (a principle, a budget): what this adds, and what gets cached |
 | **Developer experience** | The doc comment and short example the contract gets; the error message a user sees, saying what went wrong and what to do; the command that shows it working; any new setup step goes in `AGENTS.md` |
 | **Alternatives** | Any real choice (a library, an API shape, a pattern) → `/craft:adr propose` before building it |
@@ -115,6 +120,11 @@ changed since the last install (a dependency PR merged, say), reinstall the way 
   each error, each invariant.
 - **Business rules:** each rule this change touches has a test that names it in domain terms ("a
   cancelled order can't be refunded twice"). A rule with no test gets one before the change.
+- **Query counts, before the code that reads data:** a test that runs the step with two sizes of
+  data (1 item and 50) and asserts the same number of queries or calls, within the budget from
+  Step 2. The fake behind the data interface counts its calls, or the test database logs its
+  queries (the stack's tool: `assertNumQueries`, query events, a counting `fetch`). Write it first:
+  an N+1 can't pass it, and it's the only check that sees one.
 - **The core is tested through its contract with simple fakes** for its interfaces (an in-memory
   store, a fixed clock), never by mocking its internals; tests that know how a function works break
   on every refactor.
@@ -177,10 +187,11 @@ Go through the diff once against this table and fix what fails:
 | Testable | The core runs in a test with fakes for its interfaces only; no test mocks internals; every contract output, error and invariant has a test |
 | Pure core | No file, network, clock, randomness, environment or process access inside the core logic |
 | Modular | Each change sits in the module that owns it; dependencies point the allowed way; no new cycle or deep import (xray, when available) |
-| Small interface | Callers use one or a few entry points; internals aren't exported "just in case" |
+| Deep modules | Callers use one or a few entry points that hide real work; internals aren't exported "just in case"; no pass-through wrapper, getter per field or one-implementation interface |
+| No N+1 | Every data read is inside its query budget, and a test with two data sizes proves it; no query, call or lazy relation inside a loop |
 | Safe | Untrusted input is parsed at the edge; every failure mode has a defined outcome; retries are idempotent; nothing is left half-done; no secret in code or logs |
 | Compatible | No public contract changed, or the change was OK'd, versioned and has an ADR |
-| Scalable | No per-item I/O in a loop; the next similar case is an addition, not a copy |
+| Scalable | The next similar case is an addition, not a copy |
 | Performance | The measured cost didn't jump, or the numbers are in the hand-over |
 | Developer experience | Errors say what went wrong and what to do; it runs with the usual commands; any new step is in `AGENTS.md` |
 | Domain language | Names in code, tests, messages and docs match the glossary or existing terms |

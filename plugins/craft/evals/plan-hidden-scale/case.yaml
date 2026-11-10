@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: plan-hidden-scale
+context:
+  scaffold_script: scaffold.sh
