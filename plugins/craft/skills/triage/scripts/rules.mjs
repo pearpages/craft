@@ -17,36 +17,59 @@ const CLOSES = /\b(?:fix(?:e[sd])?|close[sd]?|resolve[sd]?)\s+#(\d+)\b/gi;
 const WAITS_ON = /\b(?:after|blocked by|depends on|needs)\s+#(\d+)\b/gi;
 const PRIORITY_RANK = { 'priority:high': 0, 'priority:med': 1, 'priority:low': 2 };
 const KIND_WORDS = [
-  ['type:bug', /\b(bug|broken|crash(es|ed)?|fails?|failing|wrong|fix|patch|regression|error)\b/i],
+  ['type:bug', /\b(bug|break(s|ing)?|broken|crash(es|ed)?|fails?|failing|wrong|fix|patch|regression|error)\b/i],
   ['type:spike', /\b(investigate|research|explore|spike|decide|compare|evaluate)\b/i],
   ['type:chore', /\b(refactor|upgrade|bump|dependenc(y|ies)|ci|tooling|clean ?up)\b/i],
   ['type:docs', /\b(readme|docs?|document(ation)?|write ?up)\b/i],
+  ['type:feature', /\b(add|adds|support|allow|show|let|enable|implement|create|build|introduce)\b/i],
 ];
+const ONE_COMMAND = /\brun\s+`[^`]+`/i; // "Run `/craft:scaffold check` here: it applies the changes below"
+const QUOTED = /["“«`]([^"”»`]+)["”»`]/g;
+const MIN_OVERLAP = 0.5; // shared key words over all key words of the two titles
+const COMMON = 50; // a key word in more titles than this says little about what an issue is, so it finds no twins
 
+const digitsIn = (title) => new Set(title.match(/\d+/g) ?? []);
+const quotedIn = (title) => [...title.matchAll(QUOTED)].map((m) => m[1].trim().toLowerCase());
 const numbersIn = (text, pattern) => [...(text ?? '').matchAll(pattern)].map((m) => Number(m[1]));
 const daysSince = (iso, now) => (now - new Date(iso)) / 86_400_000;
 const priorityOf = (issue) => issue.labels.find((l) => l in PRIORITY_RANK);
 
 /**
  * Same work, judged by key words: at least three shared, or every key word of the shorter title
- * (and at least two). Looser matches are /craft:issue's "maybe" list, not a merge.
+ * (and at least two); and at least half of all their key words shared. Two titles with other
+ * numbers ("ADRs 0002–0005" / "ADRs 0006–0007") or another quoted thing ('A "⋯" glyph') are
+ * different work. Looser matches are /craft:issue's "maybe" list, not a merge.
+ * @param {{ title: string, words: string[] }} a
+ * @param {{ title: string, words: string[] }} b
  */
 function sameWork(a, b) {
-  const shared = a.filter((w) => b.includes(w)).length;
-  return shared >= 3 || (shared >= 2 && shared === Math.min(a.length, b.length));
+  const shared = a.words.filter((w) => b.words.includes(w)).length;
+  const enough = shared >= 3 || (shared >= 2 && shared === Math.min(a.words.length, b.words.length));
+  if (!enough || shared / new Set([...a.words, ...b.words]).size < MIN_OVERLAP) return false;
+  const [fewer, more] = [digitsIn(a.title), digitsIn(b.title)].sort((x, y) => x.size - y.size);
+  if (![...fewer].every((d) => more.has(d))) return false;
+  const quotes = (x, y) => quotedIn(x.title).every((q) => y.title.toLowerCase().includes(q));
+  return quotes(a, b) && quotes(b, a);
 }
 
-/** Each issue's older twin, if any, found through an index of key words (no pair-by-pair scan). */
+/**
+ * Each issue's older twin, if any, found through an index of key words (no pair-by-pair scan).
+ * Only key words in at most COMMON titles find candidates: a word most titles share would make
+ * every older issue a candidate, and the scan quadratic.
+ */
 function olderTwins(issues) {
-  const words = new Map(issues.map((i) => [i.number, [...new Set(keyWords(i.title))]]));
+  const words = new Map(issues.map((i) => [i.number, { title: i.title, words: [...new Set(keyWords(i.title))] }]));
+  const titlesWith = new Map();
+  for (const { words: ws } of words.values()) for (const w of ws) titlesWith.set(w, (titlesWith.get(w) ?? 0) + 1);
+  const telling = (w) => titlesWith.get(w) <= COMMON;
   const byWord = new Map();
   const twins = new Map();
   for (const issue of [...issues].sort((a, b) => a.number - b.number)) {
     const mine = words.get(issue.number);
-    const candidates = new Set(mine.flatMap((w) => byWord.get(w) ?? []));
+    const candidates = new Set(mine.words.filter(telling).flatMap((w) => byWord.get(w) ?? []));
     const twin = [...candidates].find((older) => sameWork(mine, words.get(older.number)));
     if (twin) twins.set(issue.number, twin);
-    for (const w of mine) (byWord.get(w) ?? byWord.set(w, []).get(w)).push(issue);
+    for (const w of mine.words.filter(telling)) (byWord.get(w) ?? byWord.set(w, []).get(w)).push(issue);
   }
   return twins;
 }
@@ -54,7 +77,8 @@ function olderTwins(issues) {
 /**
  * Proposals for one repository's backlog, at most one per issue, in this order of precedence:
  * done (a merged PR says it fixes it) → duplicate (an older open issue is the same work) →
- * too-big (five or more open checklist items: a job for /craft:plan) → stale (untouched for
+ * too-big (five or more open checklist items, unless the body says one command applies them:
+ * a job for /craft:plan) → stale (untouched for
  * 180 days, not high priority, nothing waits on it) → label (no type: label; one is guessed).
  * @param {Snapshot} snapshot
  * @param {{ now: Date, staleDays?: number }} options
@@ -74,15 +98,18 @@ export function triage({ repo, issues, mergedPrs }, { now, staleDays = STALE_DAY
     const at = { repo, issue };
     const pr = fixedBy.get(issue.number);
     const twin = twins.get(issue.number);
-    const openItems = ((issue.body ?? '').match(/^\s*[-*] \[ \]/gm) ?? []).length;
+    const body = issue.body ?? '';
+    const openItems = ONE_COMMAND.test(body.split(/^\s*[-*] \[ \]/m)[0]) ? 0 : (body.match(/^\s*[-*] \[ \]/gm) ?? []).length;
     if (pr) proposals.push({ ...at, kind: 'done', action: 'close', evidence: pr, why: `PR #${pr.number} was merged and says it fixes #${issue.number}` });
     else if (twin) proposals.push({ ...at, kind: 'duplicate', action: 'close', evidence: twin, why: `same work as the older open #${twin.number}` });
     else if (openItems >= TOO_BIG_CHECKLIST) proposals.push({ ...at, kind: 'too-big', action: 'plan', why: `${openItems} open checklist items: more than one /craft:implement run` });
     else if (daysSince(issue.updatedAt, now) > staleDays && priorityOf(issue) !== 'priority:high' && !waitedOn.has(issue.number))
       proposals.push({ ...at, kind: 'stale', action: 'close', why: `untouched for ${Math.floor(daysSince(issue.updatedAt, now))} days and nothing waits on it` });
     else if (!issue.labels.some((l) => l.startsWith('type:'))) {
-      const label = KIND_WORDS.find(([, words]) => words.test(issue.title))?.[0] ?? 'type:feature';
-      proposals.push({ ...at, kind: 'label', action: 'label', label, why: `no type: label; the title reads as ${label.slice(5)}` });
+      const label = KIND_WORDS.find(([, words]) => words.test(issue.title))?.[0];
+      proposals.push(label
+        ? { ...at, kind: 'label', action: 'label', label, why: `no type: label; the title reads as ${label.slice(5)}` }
+        : { ...at, kind: 'label', action: 'label', why: "no type: label, and the title doesn't say which kind: read it and pick one" });
     }
   }
   return { proposals };

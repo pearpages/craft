@@ -36,6 +36,27 @@ test('issues that only share a word or two are not duplicates', () => {
   assert.deepEqual(kinds(result), []);
 });
 
+// Real titles from the first triage of 15 repositories (2026-11-10): one true duplicate, five look-alikes.
+test('look-alike titles are not duplicates: other numbers, another quoted thing, or mostly other words', () => {
+  const pairs = [
+    ['Review Proposed ADRs 0006–0007', 'Review Proposed ADRs 0002–0005'],
+    ['A flame glyph in pulp', 'A "⋯" glyph in pulp'],
+    ['fix open graph', 'Show an invitation in the Open Graph card of invite links'],
+    ['share a place', 'share stats e.g. most saved place'],
+    ['Feed "A prop" filter (the Home feed proposals canvas)', 'Rest of the Home feed proposals'],
+    ['Import saved places from Google Maps (plan, feasibility study)', 'Land the Google Maps import PRs (2/5 to 5/5) and merge the import into main'],
+  ];
+  for (const [older, newer] of pairs) {
+    const result = triage(snapshot([issue(1, older), issue(2, newer)]), { now: NOW });
+    assert.deepEqual(kinds(result), [], `${older} / ${newer}`);
+  }
+});
+
+test('the same work in fewer words is still a duplicate', () => {
+  const result = triage(snapshot([issue(41, 'share a place to a friend'), issue(47, 'share a place')]), { now: NOW });
+  assert.deepEqual(kinds(result), [['duplicate', 47]]);
+});
+
 test('an issue untouched for six months is stale, unless it is high priority or another issue waits on it', () => {
   const result = triage(snapshot([
     issue(2, 'Colour the output', { updated: 200 }),
@@ -58,6 +79,21 @@ test('an issue with five or more open checklist items is too big for one impleme
   assert.deepEqual(kinds(result), [['too-big', 8]]);
 });
 
+test('a checklist that one command applies is one run, not too big', () => {
+  const body = 'Run `/craft:scaffold check` here: it applies the changes below.\n\n' + Array.from({ length: 8 }, (_, i) => `- [ ] item ${i}`).join('\n');
+  const result = triage(snapshot([issue(20, 'Upgrade to craft knowledge standard v2', { body })]), { now: NOW });
+  assert.deepEqual(kinds(result), []);
+});
+
+test('a title that names no kind gets no guess: the label is left to the reader', () => {
+  const result = triage(snapshot([
+    issue(7, 'Actualitzar les dependències amb vulnerabilitats', { labels: [] }),
+    issue(8, 'Add a --quiet flag', { labels: [] }),
+  ]), { now: NOW });
+  assert.deepEqual(result.proposals.map((p) => [p.issue.number, p.label ?? null]), [[7, null], [8, 'type:feature']]);
+  assert.match(result.proposals[0].why, /doesn't say/);
+});
+
 test('an issue gets at most one proposal: done wins over everything else', () => {
   const result = triage(snapshot([issue(4, 'Something', { labels: [], updated: 400 })], [pr(9, 'fix', 'Closes #4')]), { now: NOW });
   assert.deepEqual(kinds(result), [['done', 4]]);
@@ -77,10 +113,18 @@ test('next up: ready issues by priority, then bugs before features, then the old
   assert.match(picks[0].why, /high/);
 });
 
-test('one pass over the issues, whatever their number', () => {
-  // The rules index the issues once; 2,000 issues must not take quadratic time.
-  const many = Array.from({ length: 2000 }, (_, i) => issue(i + 1, `Distinct topic number ${i} alpha${i} beta${i}`));
+test('one pass over the issues, whatever their number, even when every title shares words', () => {
+  // Every title shares "distinct topic number": a scan of each issue against all older ones that
+  // share a word is quadratic (seconds at 4,000); the index makes it milliseconds.
+  const many = Array.from({ length: 4000 }, (_, i) => issue(i + 1, `Distinct topic number ${i} alpha${i} beta${i}`));
   const started = performance.now();
-  triage(snapshot(many), { now: NOW });
-  assert.ok(performance.now() - started < 1000, 'triage of 2,000 issues stays under 1 s');
+  const result = triage(snapshot(many), { now: NOW });
+  assert.ok(performance.now() - started < 250, 'triage of 4,000 look-alike issues stays under 250 ms');
+  assert.deepEqual(kinds(result), []);
+});
+
+test('a duplicate is still found when one of its words is in most titles', () => {
+  const crowd = Array.from({ length: 80 }, (_, i) => issue(i + 1, `Place detail ${i} tweak${i}`));
+  const result = triage(snapshot([...crowd, issue(141, 'share a place to a friend'), issue(147, 'share a place')]), { now: NOW });
+  assert.deepEqual(kinds(result), [['duplicate', 147]]);
 });

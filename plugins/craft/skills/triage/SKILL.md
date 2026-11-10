@@ -49,10 +49,10 @@ At most one proposal per issue, the first rule that applies:
 | Kind | When | Proposes |
 |---|---|---|
 | **done** | A merged PR's title or body says `Fixes` / `Closes` / `Resolves #N` and the issue is still open (merged to another branch, or the keyword was in a commit GitHub didn't link) | Close, with a comment linking the PR |
-| **duplicate** | An **older** open issue is the same work (its title shares three key words, or all of the shorter title's) | Close the newer one, with a comment linking the older |
-| **too-big** | Five or more open checklist items | `/craft:plan #N`: a spec and slices |
+| **duplicate** | An **older** open issue is the same work: its title shares three key words, or all of the shorter title's, and at least half of the two titles' key words; no other number ("ADRs 0002–0005" / "0006–0007") or other quoted thing | Close the newer one, with a comment linking the older |
+| **too-big** | Five or more open checklist items, unless the body says one command applies them ("Run `/craft:scaffold check` here") | `/craft:plan #N`: a spec and slices |
 | **stale** | Untouched for 180 days, not `priority:high`, and no open issue waits on it ("after #N") | Close as stale, with a comment saying it can be reopened |
-| **label** | No `type:` label | The kind its title reads as (bug, spike, chore, docs, else feature) |
+| **label** | No `type:` label | The kind its title's words say (bug, spike, chore, docs, feature); none of them (another language, a bare noun) → no guess: read the issue and pick one |
 
 Then read each proposal before showing it: the rules are a first pass. A "done" whose PR fixed
 only part of the issue, a "duplicate" that is related but different work, a "stale" issue the
