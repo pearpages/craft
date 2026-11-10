@@ -21,10 +21,12 @@ The plugin manifest has no `version`, so every pushed commit is a new version.
 | `plugins/craft/.claude-plugin/plugin.json` | The plugin's name, description and links |
 | `plugins/craft/references/project-context.md` | The contract: where a project keeps its knowledge, when each skill reads or writes each file, and where the labels and board come from (§ 2b), and the memory admission test (§ 3b), and the lessons ladder for mistakes (§ 3c). Every skill opts in with one line |
 | `plugins/craft/references/standard-changes.md` | The standard's versions: what each one asks of a repository. `scaffold/scripts/check.mjs` reads the newest; workbench's sweep reads it from GitHub |
+| `plugins/craft/references/design.md` | What scalable and performant mean in craft: deep modules, data read in sets, a query budget a test counts (no N+1). `plan` decides it, `implement` builds and tests it, `review` checks it |
 | `plugins/craft/references/xray.md` | How a craft skill uses xray's data when xray's plugin is installed (`maturity`) |
 | `plugins/craft/skills/scaffold/` | `/craft:scaffold`: creates or checks the knowledge files, and flags docs that name paths or scripts the repo no longer has; `scripts/check.mjs` gathers the facts, `templates/` holds the files |
 | `plugins/craft/skills/adr/` | `/craft:adr`: propose, accept, supersede and check Architecture Decision Records in any repository |
 | `plugins/craft/skills/issue/` | `/craft:issue`: queue issues, then push them; `scripts/push.mjs` lists each repo's issues once and creates them with `gh` (and adds them to a board when given one); `scripts/duplicates.mjs` holds the duplicate rules, with no I/O |
+| `plugins/craft/skills/plan/` | `/craft:plan`: an idea to a spec (budgets, seams and contracts, slices with their proof) in a parent issue, unless the project keeps specs elsewhere, and its slices through `/craft:issue`, on OK |
 | `plugins/craft/skills/implement/` | `/craft:implement`: one issue on a branch, from design (contracts, pure core, failure modes, domain terms, business rules) through tests and checks to a hand-over for `/craft:commit-message` |
 | `plugins/craft/skills/review/` | `/craft:review`: findings by severity against the issue's asks and the project's rules, then the PR (push, house-style description, labels) on OK |
 | `plugins/craft/skills/release/` | `/craft:release`: `merge #N` (green CI, review done, the repo's merge method), `release` (version from the changes, notes, the versioning ADR's tag steps), `notes` |

@@ -69,6 +69,8 @@ is a small, related fix the PR text explains.
 | **Contracts** | A changed exported function, CLI flag, file or JSON format, or API: is it compatible? A breaking change needs the user's OK, an ADR and the versioning rule |
 | **Business rules** | A rule the product enforced before that the diff changes: was it asked for (issue or ADR), and is it tested? |
 | **Domain language** | New names that contradict the glossary or existing terms; a new synonym for an existing concept |
+| **Data access (N+1)** | A query, HTTP call, file read or lazily loaded relation inside a loop, `map` or one-by-one `await`; a new per-item entry point used from a loop; a step that reads data with no test counting its queries at two sizes. Rules: `${CLAUDE_PLUGIN_ROOT}/references/design.md` |
+| **Module depth** | A shallow module: a wrapper that only forwards, a getter per field, an interface that mirrors its one implementation, callers that must call several things in order. And the reverse: an entry point missing what its caller needs, so every caller assembles it |
 | **Modularity** | A new dependency between modules that `architecture.md` doesn't allow, an import cycle, reaching into another module's internals (on TypeScript/JavaScript, xray's graph when available: `${CLAUDE_PLUGIN_ROOT}/references/xray.md`) |
 | **Security** | Run `/craft:security diff` when the change touches input, secrets, network, files, permissions or dependencies, and fold in its findings |
 | **Checks** | Every command from Step 1 passes; a failure is a blocker |
@@ -91,8 +93,8 @@ Issue #N: 3 of 3 asks done.
 ```
 
 - **blocker:** a principle broken, a check failing, an issue ask missing, a breaking change
-  nobody OK'd, a secret.
-- **should:** a doc or lesson missing, weak tests, scope creep.
+  nobody OK'd, a secret, an N+1 (a data read in a loop, or a new data read with no counting test).
+- **should:** a doc or lesson missing, weak tests, scope creep, a shallow module.
 - **nit:** names, wording, small clean-ups. Few; skip taste.
 
 Every finding names the file and line and the rule it rests on, and says what would fix it. No

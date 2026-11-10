@@ -110,7 +110,7 @@ A mistake is worth something only if it can't happen the same way again. Put its
 | `craft:diagram`, `xray:check-diagrams` | `architecture.md` | `architecture.md` diagrams (on OK) |
 | `xray:onboard` | `AGENTS.md`, `architecture.md` | `docs/onboarding/` |
 | `xray:explain-pr`, `xray:features` | `architecture.md`, `GLOSSARY.md` | — / `xray.features.json` |
-| plan *(to build)* | `vision.md`, `decisions.md`, `architecture.md`, issues | a spec, issues, a milestone |
+| `craft:plan` | `vision.md`, `principles.md`, `decisions.md` and ADRs, `architecture.md`, open issues and milestones, the code it touches | a spec (in a parent issue, or where the project's `AGENTS.md` or an ADR says), its slices as issues (via `craft:issue`), a milestone, all on OK |
 | `craft:implement` | `AGENTS.md` (commands, Pitfalls), `principles.md`, `architecture.md`, the ADRs for the area, `security.md` when relevant, `GLOSSARY.md`, the business rules in code and tests, xray's graph when available | code and tests on a branch, `architecture.md`, `README.md`, `security.md`, Proposed ADRs, glossary entries (offered) |
 | `craft:review` | the diff, the issue it fixes, `AGENTS.md` (commands, Pitfalls), `principles.md`, `architecture.md`, the ADRs for the area, `security.md` (via `craft:security diff`), `GLOSSARY.md` | findings; the PR (title, description, labels), on OK; a fix without its lesson (§ 3c) is a finding |
 | `craft:release` | `AGENTS.md` (release steps), the versioning ADR, the tags, the merged PRs since the last release, CI | merged PRs, closed issues, tags, release notes (GitHub Releases or `CHANGELOG.md`), all on OK |

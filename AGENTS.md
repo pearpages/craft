@@ -49,7 +49,7 @@ Knowledge standard: craft v2 (`/craft:scaffold check` upgrades it)
   (Node's built-in runner, no dependencies; [ADR-0004](docs/adr/0004-node-test-runner-for-scripts.md)).
 - `claude --plugin-dir plugins/craft`: start Claude Code with the working copy of the plugin,
   to try a skill before pushing.
-- `claude plugin eval plugins/craft --trust-plugin --scaffold`: run the skill evals in
+- `claude plugin eval plugins/craft --trust-plugin --scaffold --allow-tools Bash Write Edit`: run the skill evals in
   `plugins/craft/evals/` (each case builds a fixture repo, runs a skill, grades the result) and
   write a report; `--case <glob>` runs one. Each run is a real Claude session, so it costs and
   takes minutes: run it before pushing a skill change (P6), not on every commit.
@@ -68,5 +68,8 @@ Knowledge standard: craft v2 (`/craft:scaffold check` upgrades it)
 - An eval run can't run the project's tests or git ("xcrun" or "No version is set for shim") →
   the eval sandbox has a fresh `HOME`, so neither mise's Node nor the system git works there → grade
   what the skill wrote and reported, and accept "couldn't run X here, run `cmd`" instead of a real run.
+- An eval run says it "has no tool that can write files or run commands" and every implement
+  grader on files fails → since Claude Code 2.1.322 the eval sandbox gates Bash, Write and Edit →
+  pass `--allow-tools Bash Write Edit` (the command above has it).
 - A push is rejected for a "Stripe Test API Secret Key" in an eval case → GitHub push protection
   scans fixtures too → build a fake key from pieces in `scaffold.sh` (see `security-new-secret`).

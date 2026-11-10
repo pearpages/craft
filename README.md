@@ -27,6 +27,7 @@ To have `/craft:issue` put issues on a GitHub project board, name it in your `~/
 |---|---|
 | `/craft:scaffold` | Creates a project's knowledge files, or checks an existing project against the standard |
 | `/craft:adr` | Records a decision as an ADR: proposes it, accepts it on your word, supersedes an old one, or checks the index |
+| `/craft:plan` | Turns an idea into a short spec and small, ordered issues: scale and speed as numbers, the module seams and their contracts, how each slice is proven |
 | `/craft:issue` | Queues issues and pushes them in one go: right repo, labels, your board if you have one, no duplicates |
 | `/craft:implement` | One issue to finished code: designs contracts and the outside world behind small interfaces, tests first, checks security, failure modes, performance and modularity, keeps the docs true |
 | `/craft:review` | Reviews a branch or PR against its issue and the project's rules (principles, docs in the same change, lessons, contracts), then opens the PR the house way |
