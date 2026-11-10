@@ -1,4 +1,6 @@
 ---
-type: llm
-criteria: For the bundling item, the answer notes the closed issue #9 and raises reopening it (or linking it) instead of silently creating a new issue or silently dropping the item.
+type: regex
+pattern: "reopen[^\\n]{0,120}#9|#9[^\\n]{0,160}reopen"
+flags: i
+match: contains
 ---
