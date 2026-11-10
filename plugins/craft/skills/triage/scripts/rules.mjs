@@ -26,6 +26,7 @@ const KIND_WORDS = [
 const ONE_COMMAND = /\brun\s+`[^`]+`/i; // "Run `/craft:scaffold check` here: it applies the changes below"
 const QUOTED = /["“«`]([^"”»`]+)["”»`]/g;
 const MIN_OVERLAP = 0.5; // shared key words over all key words of the two titles
+const COMMON = 50; // a key word in more titles than this says little about what an issue is, so it finds no twins
 
 const digitsIn = (title) => new Set(title.match(/\d+/g) ?? []);
 const quotedIn = (title) => [...title.matchAll(QUOTED)].map((m) => m[1].trim().toLowerCase());
@@ -51,17 +52,24 @@ function sameWork(a, b) {
   return quotes(a, b) && quotes(b, a);
 }
 
-/** Each issue's older twin, if any, found through an index of key words (no pair-by-pair scan). */
+/**
+ * Each issue's older twin, if any, found through an index of key words (no pair-by-pair scan).
+ * Only key words in at most COMMON titles find candidates: a word most titles share would make
+ * every older issue a candidate, and the scan quadratic.
+ */
 function olderTwins(issues) {
   const words = new Map(issues.map((i) => [i.number, { title: i.title, words: [...new Set(keyWords(i.title))] }]));
+  const titlesWith = new Map();
+  for (const { words: ws } of words.values()) for (const w of ws) titlesWith.set(w, (titlesWith.get(w) ?? 0) + 1);
+  const telling = (w) => titlesWith.get(w) <= COMMON;
   const byWord = new Map();
   const twins = new Map();
   for (const issue of [...issues].sort((a, b) => a.number - b.number)) {
     const mine = words.get(issue.number);
-    const candidates = new Set(mine.words.flatMap((w) => byWord.get(w) ?? []));
+    const candidates = new Set(mine.words.filter(telling).flatMap((w) => byWord.get(w) ?? []));
     const twin = [...candidates].find((older) => sameWork(mine, words.get(older.number)));
     if (twin) twins.set(issue.number, twin);
-    for (const w of mine.words) (byWord.get(w) ?? byWord.set(w, []).get(w)).push(issue);
+    for (const w of mine.words.filter(telling)) (byWord.get(w) ?? byWord.set(w, []).get(w)).push(issue);
   }
   return twins;
 }

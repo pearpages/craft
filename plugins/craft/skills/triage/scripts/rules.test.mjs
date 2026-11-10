@@ -113,10 +113,18 @@ test('next up: ready issues by priority, then bugs before features, then the old
   assert.match(picks[0].why, /high/);
 });
 
-test('one pass over the issues, whatever their number', () => {
-  // The rules index the issues once; 2,000 issues must not take quadratic time.
-  const many = Array.from({ length: 2000 }, (_, i) => issue(i + 1, `Distinct topic number ${i} alpha${i} beta${i}`));
+test('one pass over the issues, whatever their number, even when every title shares words', () => {
+  // Every title shares "distinct topic number": a scan of each issue against all older ones that
+  // share a word is quadratic (seconds at 4,000); the index makes it milliseconds.
+  const many = Array.from({ length: 4000 }, (_, i) => issue(i + 1, `Distinct topic number ${i} alpha${i} beta${i}`));
   const started = performance.now();
-  triage(snapshot(many), { now: NOW });
-  assert.ok(performance.now() - started < 1000, 'triage of 2,000 issues stays under 1 s');
+  const result = triage(snapshot(many), { now: NOW });
+  assert.ok(performance.now() - started < 250, 'triage of 4,000 look-alike issues stays under 250 ms');
+  assert.deepEqual(kinds(result), []);
+});
+
+test('a duplicate is still found when one of its words is in most titles', () => {
+  const crowd = Array.from({ length: 80 }, (_, i) => issue(i + 1, `Place detail ${i} tweak${i}`));
+  const result = triage(snapshot([...crowd, issue(141, 'share a place to a friend'), issue(147, 'share a place')]), { now: NOW });
+  assert.deepEqual(kinds(result), [['duplicate', 147]]);
 });
