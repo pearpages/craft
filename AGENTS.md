@@ -63,6 +63,9 @@ Knowledge standard: craft v2 (`/craft:scaffold check` upgrades it)
 - An eval's `llm` grader fails although the skill did the right thing → `focus: files` hands the
   judge only the created files' names, and an `llm` grader takes no `target` → judge the final
   answer (the skill shows what it wrote), and check file contents with `regex` graders.
+- An `llm` grader fails on a long answer that plainly meets it (judge votes FAIL FAIL PASS) → judges
+  are noisy on long answers full of tables → check anything a pattern can catch (a kind in a table,
+  a number, a phrase) with a `regex` grader; keep `llm` criteria short, for judgement only.
 - `claude plugin eval --case a --case b` runs only one case → it takes one glob → run one case per
   call, or a glob that matches both.
 - An eval run can't run the project's tests or git ("xcrun" or "No version is set for shim") →
