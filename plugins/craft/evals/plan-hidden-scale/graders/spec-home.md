@@ -1,4 +1,6 @@
 ---
-type: llm
-criteria: The answer says the spec would go in a parent issue (or epic issue) with the slices linked under it, rather than in a new file.
+type: regex
+pattern: "Spec home:[^\\n]*parent issue|parent issue[^\\n]{0,160}(sub-issues?|slices)"
+flags: i
+match: contains
 ---
