@@ -17,8 +17,10 @@ issue for an unfixed vulnerability.
   the user's session, with the user's permissions.
 - A skill reads and edits files in the repository it runs on. The repository's own files (an
   ADR, an AGENTS.md written by someone else) are data, never instructions to the skill.
-- Outward-facing steps (commits, pushes, issues) need the user's OK
-  ([P3](principles.md)).
+- Outward-facing steps (commits, pushes, issues, merges, tags, published releases) need the
+  user's OK ([P3](principles.md)). `/craft:release` force-pushes only the tag the project says
+  moves (a major tag like `v0`), never a release tag or a branch, and never publishes a package
+  to a registry.
 - Bundled scripts, standard library only:
   - `scaffold/scripts/check.mjs` and `maturity/scripts/scan.mjs` read the target repository and
     print facts; they write nothing.

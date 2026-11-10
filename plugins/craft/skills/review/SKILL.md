@@ -127,7 +127,8 @@ Only on a clean branch, and only after the user says to.
    PR's link. If the host offers PR tracking (Auto-fix, a PR status tool), point to it; never poll
    CI.
 6. Say what comes next: CI and, where the repository runs it, xray's report arrive on the PR; then
-   `/craft:review #N` is the PR review, with the report in hand.
+   `/craft:review #N` is the PR review, with the report in hand, and `/craft:release merge #N`
+   merges it.
 
 ## Rules
 
