@@ -113,7 +113,7 @@ A mistake is worth something only if it can't happen the same way again. Put its
 | plan *(to build)* | `vision.md`, `decisions.md`, `architecture.md`, issues | a spec, issues, a milestone |
 | `craft:implement` | `AGENTS.md` (commands, Pitfalls), `principles.md`, `architecture.md`, the ADRs for the area, `security.md` when relevant, `GLOSSARY.md`, the business rules in code and tests, xray's graph when available | code and tests on a branch, `architecture.md`, `README.md`, `security.md`, Proposed ADRs, glossary entries (offered) |
 | `craft:review` | the diff, the issue it fixes, `AGENTS.md` (commands, Pitfalls), `principles.md`, `architecture.md`, the ADRs for the area, `security.md` (via `craft:security diff`), `GLOSSARY.md` | findings; the PR (title, description, labels), on OK; a fix without its lesson (§ 3c) is a finding |
-| merge & release *(to build)* | `AGENTS.md` (release steps), the versioning ADR | closed issues, tags, release notes |
+| `craft:release` | `AGENTS.md` (release steps), the versioning ADR, the tags, the merged PRs since the last release, CI | merged PRs, closed issues, tags, release notes (GitHub Releases or `CHANGELOG.md`), all on OK |
 | `craft:security` | `security.md`, the ADRs on security or dependencies, the diff (or the repo for `audit`) | `security.md` (on OK), issues (via `craft:issue`) |
 | `craft:ci` | `AGENTS.md` (commands, order), the manifests, `security.md` (pinning), existing workflows | `.github/workflows/ci.yml`, `architecture.md` testing section (on OK), issues for missing checks |
 | `craft:deps` | `decisions.md` and ADRs (version limits), `security.md` (policy), `AGENTS.md` (commands), the update PRs | `.github/dependabot.yml`, `security.md` Dependencies, a branch for a major (all on OK) |
