@@ -104,6 +104,7 @@ A mistake is worth something only if it can't happen the same way again. Put its
 |---|---|---|
 | `craft:scaffold` | everything (creates it) | every file, on the rules in its own SKILL.md |
 | `craft:maturity` | everything | issues (via `craft:issue`) |
+| `craft:triage` | `AGENTS.md` and § 2b (labels, board), `vision.md` for priority, open issues and merged PRs | closed issues with a comment, labels, all on OK; too-big issues to `craft:plan` |
 | `craft:issue` | `AGENTS.md` (labels, board), `vision.md` for priority | issues |
 | `craft:commit-message` | `AGENTS.md` (commit convention) | — |
 | `craft:adr` | `AGENTS.md`, `decisions.md`, the ADRs it points to, `GLOSSARY.md`, `principles.md` | `docs/adr/`, `decisions.md` |

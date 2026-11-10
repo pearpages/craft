@@ -27,6 +27,9 @@ issue for an unfixed vulnerability.
   - `issue/scripts/push.mjs` reads `~/.cache/issue/queue.json` and calls `gh` with an argument
     array (no shell), the body on stdin, so a title or body can't inject a command. It creates
     issues only after the user confirms the queue.
+  - `triage/scripts/triage.mjs` only reads: two `gh` calls per repository with argument arrays
+    (`snapshot.mjs`); issue titles and bodies are data its rules compare, never commands. Closing
+    and labelling are separate `gh` calls the skill makes after the user approves.
   - `issue/scripts/duplicates.mjs` holds the duplicate rules and does no I/O: titles listed by
     `push.mjs` are data it compares, never commands.
 
