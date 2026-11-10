@@ -176,7 +176,8 @@ Show the spec and the slices, and ask once: file all, edit, or drop some. Then, 
    priority.
 3. **Link them:** a task list of the slices in the parent's body (`- [ ] #12`), and GitHub
    sub-issues when the repository allows them (`gh api repos/{owner}/{repo}/issues/P/sub_issues
-   -F sub_issue_id=<id>`), on the same OK.
+   -F sub_issue_id=<id>`, where `<id>` is the slice's internal id from
+   `gh api repos/{owner}/{repo}/issues/N --jq .id`, not its number), on the same OK.
 4. **A milestone** only when the user wants this idea tracked as a release or a date
    (`gh api repos/{owner}/{repo}/milestones -f title=…`), on OK.
 
