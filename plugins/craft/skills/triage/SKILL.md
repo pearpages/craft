@@ -82,7 +82,7 @@ up for them: offer the tracking setup's label sync (or `gh label create`) first,
 
 ## Step 4: apply, on OK
 
-One `gh` call per approved change, argument arrays, comments on stdin:
+One `gh` call per approved change, as an argument array (the comment is one argument, never pasted into a shell string):
 
 - close: `gh issue close N --repo R --reason completed|"not planned" --comment <why, with the link>`
   (`completed` for done, `not planned` for duplicate and stale);

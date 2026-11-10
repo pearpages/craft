@@ -12,7 +12,7 @@ import { nextUp, triage } from './rules.mjs';
 import { readSnapshots } from './snapshot.mjs';
 
 const args = process.argv.slice(2);
-const repos = args.flatMap((a, i) => (a === '--repo' ? [args[i + 1]] : []));
+const repos = args.flatMap((a, i) => (a === '--repo' && args[i + 1] && !args[i + 1].startsWith('--') ? [args[i + 1]] : []));
 const limit = Number(args[args.indexOf('--limit') + 1]) || 3;
 if (!repos.length) {
   console.error('Name at least one repository: --repo owner/name');
