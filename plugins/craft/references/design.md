@@ -21,6 +21,15 @@ for it.
 - **An interface where it pays:** at the outside world (database, network, files, clock,
   randomness, processes), so the core is tested with one fake; or where a second implementation
   exists today. Elsewhere, plain functions and data.
+- **A fake is only as good as its match with the real thing.** One contract test suite runs
+  against both the fake and the real implementation, wherever the real one can run in a test (a
+  temporary database, folder or git repo). Where it can't, say so: the fake is then a guess.
+- **A module owns its state.** No module-level variables that other modules change, no hidden
+  global config: settings and shared resources are passed in. Coupling through state doesn't show
+  in an import graph.
+- **Deepen as you go.** A change that must extend a shallow module deepens it (merges the
+  forwarding wrapper into its caller, adds the batch entry point) as part of the change. Waiting
+  for "a refactor later" means it never happens; only unrelated clean-ups are out of scope.
 
 ## Performant means no N+1
 
@@ -36,7 +45,8 @@ the cost.
   constant, independent of how many items there are ("2 queries for any number of orders"; "one
   call per 100 PRs"). Where the count must grow, say how (per page, per repository) and why.
 - **A test counts them.** The fake behind the data interface counts its calls, or the real test
-  database logs its queries, and the test asserts the budget with **two sizes** of data (say 1 and
+  database logs its queries (preferred when it can run: a fake's count proves the core asks once,
+  not that the adapter's own query is one), and the test asserts the budget with **two sizes** of data (say 1 and
   50 items): the same count for both proves nothing grows per item. Use the stack's tool when it
   has one: Django `assertNumQueries`, Rails `bullet` or `assert_queries_count`, ActiveRecord or
   Prisma / Drizzle / Sequelize query events, SQLAlchemy event listeners, a counting `fetch` for

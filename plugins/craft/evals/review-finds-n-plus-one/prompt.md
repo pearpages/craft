@@ -1,7 +1,7 @@
 ---
 name: review-finds-n-plus-one
 tags: [review]
-runs: 1
+runs: 3
 max_turns: 30
 timeout_seconds: 600
 allowed_tools: [Read, Glob, Grep, Skill, Bash, Write, Edit]
