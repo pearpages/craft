@@ -65,13 +65,13 @@ is a small, related fix the PR text explains.
 | **Principles** | Each rule in `principles.md`: does the diff keep it? Quote the rule a finding breaks |
 | **Docs in the same change** | Structure or behaviour changed but `architecture.md` didn't; a user-visible change with no README edit; a new command not in `AGENTS.md`; the surface changed but `security.md` didn't; a real choice made with no ADR |
 | **Lessons** (contract § 3c) | A bug fix with no regression test that fails without it; a surprise met along the way with no pitfall, rule or check |
-| **Tests** | New behaviour has tests through its contract; a fixed bug has the test that would have caught it; tests aren't mocking internals |
+| **Tests** | New behaviour has tests through its contract; a fixed bug has the test that would have caught it; tests aren't mocking internals; a new fake is checked against the real implementation by the same contract tests where that can run |
 | **Contracts** | A changed exported function, CLI flag, file or JSON format, or API: is it compatible? A breaking change needs the user's OK, an ADR and the versioning rule |
 | **Business rules** | A rule the product enforced before that the diff changes: was it asked for (issue or ADR), and is it tested? |
 | **Domain language** | New names that contradict the glossary or existing terms; a new synonym for an existing concept |
 | **Data access (N+1)** | A query, HTTP call, file read or lazily loaded relation inside a loop, `map` or one-by-one `await`; a new per-item entry point used from a loop; a step that reads data with no test counting its queries at two sizes. Rules: `${CLAUDE_PLUGIN_ROOT}/references/design.md` |
 | **Module depth** | A shallow module: a wrapper that only forwards, a getter per field, an interface that mirrors its one implementation, callers that must call several things in order. And the reverse: an entry point missing what its caller needs, so every caller assembles it |
-| **Modularity** | A new dependency between modules that `architecture.md` doesn't allow, an import cycle, reaching into another module's internals (on TypeScript/JavaScript, xray's graph when available: `${CLAUDE_PLUGIN_ROOT}/references/xray.md`) |
+| **Modularity** | A new dependency between modules that `architecture.md` doesn't allow, an import cycle, reaching into another module's internals (on TypeScript/JavaScript, xray's graph when available: `${CLAUDE_PLUGIN_ROOT}/references/xray.md`); a module-level variable another module changes, or hidden global config |
 | **Security** | Run `/craft:security diff` when the change touches input, secrets, network, files, permissions or dependencies, and fold in its findings |
 | **Checks** | Every command from Step 1 passes; a failure is a blocker |
 | **xray's report** (PR review) | A feature or dependent the report says the change reaches that the PR text, the tests or the issue don't account for; a risky file with no test change |
@@ -93,8 +93,10 @@ Issue #N: 3 of 3 asks done.
 ```
 
 - **blocker:** a principle broken, a check failing, an issue ask missing, a breaking change
-  nobody OK'd, a secret, an N+1 (a data read in a loop, or a new data read with no counting test).
-- **should:** a doc or lesson missing, weak tests, scope creep, a shallow module.
+  nobody OK'd, a secret, an N+1 (a data read in a loop, or a new data read with no counting test),
+  a shallow module the change adds (it costs every future caller).
+- **should:** a doc or lesson missing, weak tests, scope creep, a shallow module the change only
+  touches.
 - **nit:** names, wording, small clean-ups. Few; skip taste.
 
 Every finding names the file and line and the rule it rests on, and says what would fix it. No

@@ -112,7 +112,13 @@ Propose each fix as a small diff; apply only what the user approves.
 | Type check | npm run typecheck | ✅ |
 | Test | npm test -- --run | ✅ |
 | Coverage | — | ❌ no coverage floor: issue proposed |
+| Boundaries | — | ❌ architecture.md's dependency rules aren't checked: issue proposed |
 ```
+
+**Boundaries:** when `architecture.md` says which module may depend on which, and nothing runs
+that rule (a dependency-cruiser config, an import-linter contract, a boundary test), add the row
+and propose an issue for a check, so the rule climbs from a doc to CI (contract § 3c). Choosing
+the tool is the issue's work, not this skill's.
 
 Then ask once: apply the files (all / pick / skip), and open the issues for the missing checks
 through `/craft:issue` (`type:chore`, `area:infra`).

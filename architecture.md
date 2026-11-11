@@ -21,7 +21,7 @@ The plugin manifest has no `version`, so every pushed commit is a new version.
 | `plugins/craft/.claude-plugin/plugin.json` | The plugin's name, description and links |
 | `plugins/craft/references/project-context.md` | The contract: where a project keeps its knowledge, when each skill reads or writes each file, and where the labels and board come from (§ 2b), and the memory admission test (§ 3b), and the lessons ladder for mistakes (§ 3c). Every skill opts in with one line |
 | `plugins/craft/references/standard-changes.md` | The standard's versions: what each one asks of a repository. `scaffold/scripts/check.mjs` reads the newest; workbench's sweep reads it from GitHub |
-| `plugins/craft/references/design.md` | What scalable and performant mean in craft: deep modules, data read in sets, a query budget a test counts (no N+1). `plan` decides it, `implement` builds and tests it, `review` checks it |
+| `plugins/craft/references/design.md` | What scalable and performant mean in craft: deep modules, deepened as they're extended, each owning its state; fakes checked against the real implementation by the same contract tests; data read in sets, a query budget a test counts (no N+1). `plan` decides it, `implement` builds and tests it, `review` checks it |
 | `plugins/craft/references/xray.md` | How a craft skill uses xray's data when xray's plugin is installed (`maturity`) |
 | `plugins/craft/skills/scaffold/` | `/craft:scaffold`: creates or checks the knowledge files, and flags docs that name paths or scripts the repo no longer has; `scripts/check.mjs` gathers the facts, `templates/` holds the files |
 | `plugins/craft/skills/adr/` | `/craft:adr`: propose, accept, supersede and check Architecture Decision Records in any repository |
@@ -69,7 +69,8 @@ files in the repository Claude Code is working in. The only state kept outside a
 - Skill evals with Claude Code's `claude plugin eval`: `plugins/craft/evals/<case>/` holds a
   scaffold script that builds a small git repository, the prompt that runs one skill, and
   graders (checks on the files it wrote, and an LLM rubric for what it said and asked). The
-  runner also scores a run without the plugin, so a case shows what the skill adds.
+  runner also scores a run without the plugin, so a case shows what the skill adds. The cases
+  for the design rules (plan, implement, review) run 3 times, so one lucky pass isn't proof.
 - Script rules are unit-tested with Node's built-in runner: a pure module beside its script
   (`issue/scripts/duplicates.mjs`) and a `*.test.mjs` next to it
   ([ADR-0004](docs/adr/0004-node-test-runner-for-scripts.md)). The rest of the scripts have

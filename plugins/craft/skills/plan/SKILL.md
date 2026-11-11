@@ -98,7 +98,10 @@ shallow: merge it into its caller or give it more to hide.
   are pure: inputs in, result out, tested directly, no fakes needed.
 - **No layer without a reason:** a wrapper that only forwards, a getter per field, a factory for
   one product, a generic type with one use. Each costs a reader a jump and hides nothing.
-- **Follow the shape that already exists** for a similar feature; don't add a second way.
+- **Each module owns its state:** settings and shared resources are passed in, never a
+  module-level variable another module changes.
+- **Follow the shape that already exists** for a similar feature; don't add a second way. Where
+  that shape is shallow, the slice that extends it deepens it.
 
 Example of the shape: a duplicate check where `duplicates.mjs` holds the matching rules with no
 I/O, tested directly, and `push.mjs` alone calls GitHub, once per repository.
@@ -116,7 +119,8 @@ Cut the work into issues, each:
 - **Proven by its own tests:** the contract tests that show it done ("Done when …"), and the
   measurement when it carries a budget ("the 10,000-issue fixture runs under 1 s"). A slice that
   reads data is done only when **a test counts its queries or calls** with two sizes of data
-  (1 and 50 items) and both stay within the budget.
+  (1 and 50 items) and both stay within the budget. A slice that adds an adapter is done only
+  when its fake passes the same contract tests, where the adapter can run in a test.
 - **Ordered:** what it needs first ("after #12"). The first slice is the thinnest end-to-end
   path that works, so later slices add to something running; the pure core comes before the
   adapters that feed it.

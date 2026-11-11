@@ -85,7 +85,7 @@ touches: a test-only or one-file change may need three rows, not fourteen.
 | **The contract** | For each new or changed entry point: **inputs and outputs** as types; **errors** it can produce, and whether they are returned as values or thrown (follow the project's convention; say which); **invariants** that always hold; **side effects** (what it writes, calls or changes). The smallest surface that does the job: one entry point that hides several steps, no option nobody needs yet. **Deep, not shallow:** no wrapper that only forwards, no getter per field, no interface that mirrors one implementation |
 | **Abstractions** | Each outside dependency the logic needs (storage, network, clock, randomness, environment, processes, git) as a small interface the core receives, with the real implementation at the edge. Name each one and where it is created |
 | **Dependency direction** | Who imports whom: the core depends on its interfaces, adapters depend on the core, never the other way. No new cycle, no reaching into another module's internals |
-| **Data** | What it reads and writes, where state lives, and **where untrusted input is parsed** (once, at the edge, into the contract's types) |
+| **Data** | What it reads and writes, where state lives (owned by one module, passed in, never a module-level variable another module changes), and **where untrusted input is parsed** (once, at the edge, into the contract's types) |
 | **Failure modes** | Bad input, a missing file, a timeout, a partial write, a retry: what happens in each. Retries don't repeat effects (idempotent); a multi-step change either completes or leaves nothing behind |
 | **Compatibility** | Does it change a contract someone already uses (an exported function, a CLI flag, a file or JSON format, an API)? Then it is a breaking change: the user's decision, with an ADR and the project's versioning rule |
 | **Domain language** | The terms it uses, from the glossary or existing code. No new synonym for an existing concept; a new concept gets a name and a proposed `GLOSSARY.md` entry |
@@ -130,6 +130,9 @@ changed since the last install (a dependency PR merged, say), reinstall the way 
   on every refactor.
 - **The edges are tested for real** where the project's principles say so (a real temporary git
   repo, a real file system), not through the fakes.
+- **The fake and the real implementation pass the same contract tests**, wherever the real one
+  can run in a test; query counts come from the real one's log when it can run. Where it can't
+  run here, say so in the hand-over: the fake is unverified, and so is a count taken from it.
 - Failure modes from Step 2 each get a test: bad input is rejected with the documented error, a
   retry does nothing twice.
 - Run tests once, never in watch mode.
@@ -145,8 +148,11 @@ changed since the last install (a dependency PR merged, say), reinstall the way 
 - Name code after the domain: types, functions and modules use the terms from Step 1.
 - Document the contract where callers read it: a doc comment on each exported entry point (what
   it does, inputs, outputs, errors, a short example), in the project's style.
-- **Out of scope** (a refactor that would help, a bug next door): don't do it here. Note it, and
-  file it at the end through `/craft:issue`.
+- **Deepen what you extend:** when the change must add to a shallow module (a wrapper that only
+  forwards, a per-item read the change would loop over), deepening it is part of the change: merge
+  the wrapper into its caller, add the batch entry point. Say so in the hand-over.
+- **Out of scope** (any other refactor that would help, a bug next door): don't do it here. Note
+  it, and file it at the end through `/craft:issue`.
 
 ## Step 6: check
 
@@ -184,7 +190,7 @@ Go through the diff once against this table and fix what fails:
 | Check | Pass when |
 |---|---|
 | Contracts | Each new or changed entry point has typed inputs and outputs, documented errors and side effects, and a doc comment with an example |
-| Testable | The core runs in a test with fakes for its interfaces only; no test mocks internals; every contract output, error and invariant has a test |
+| Testable | The core runs in a test with fakes for its interfaces only; no test mocks internals; every contract output, error and invariant has a test; each fake passes the real implementation's contract tests, or the hand-over says it couldn't be checked here |
 | Pure core | No file, network, clock, randomness, environment or process access inside the core logic |
 | Modular | Each change sits in the module that owns it; dependencies point the allowed way; no new cycle or deep import (xray, when available) |
 | Deep modules | Callers use one or a few entry points that hide real work; internals aren't exported "just in case"; no pass-through wrapper, getter per field or one-implementation interface |
@@ -202,7 +208,8 @@ Go through the diff once against this table and fix what fails:
 ## Step 9: hand over
 
 Show: what changed (files, one line each), the contract (as it now reads), how it was tested
-(commands and results), the modularity comparison and any measurements, the design choices and
+(commands and results), **what wasn't verified** (each fake, and each count taken from one, that
+no test ran against the real implementation, and why), the modularity comparison and any measurements, the design choices and
 ADRs proposed, and the out-of-scope items to file. Then offer `/craft:commit-message` with
 `Fixes #N`, `/craft:review` to check the branch and open the PR, and `/craft:issue` for the
 out-of-scope items. The user commits; pushing and the PR wait for their OK.
